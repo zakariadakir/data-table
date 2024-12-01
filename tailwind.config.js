@@ -28,6 +28,10 @@ module.exports = {
           "0px 0px 0px 4px #5e5adb66, 0px 0px 0px 1px #868fa032, 0px 1px 2px 0px #0000000f",
         custom17:
           "0px 10px 30px 0px #00000033, 0px 30px 70px 0px #1a224026, 0px 0px 0px 1px #888faa1a",
+        custom18: "0px 0px 0px 1px #9E9BF5, 0px 1px 1px 0px #0000001A",
+        custom19: "0px 2px 6px 0px #00000040, 0px 0px 0px 0.5px #00000014",
+        custom20: "0px 0px 0px 1px #464F60",
+        custom21: "0px 0px 0px 1px #F76F7F, 0px 1px 1px 0px #000000",
       },
     },
   },

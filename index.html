@@ -1,11 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  
-</body>
+  <head>
+    <title>Data Table V3</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Explore an innovative data project showcasing advanced analytics, insights, and data visualization tools to simplify complex datasets and drive informed decisions."
+    />
+    <meta
+      name="keywords"
+      content="data project, data analytics, data visualization, insights, big data, machine learning, data-driven decisions, data tools, analytics project"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles/output.css" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script type="module" src="./scripts/scripts.js"></script>
+  </head>
+  <body class="font-inter bg-gray-100 p-0 min-[537px]:p-4">
+    <div
+      class="bg-white min-w-full min-h-full rounded-none min-[537px]:rounded-xl py-4 px-5"
+    >
+      <header>
+        <div class="flex items-center justify-between">
+          <h1 class="font-bold text-2xl text-gray-900 flex items-center gap-2">
+            Projects
+            <span
+              id="projects-count"
+              class="font-medium text-xs text-indigo-500 bg-indigo-50 px-2.5 py-0.5 rounded-xl"
+            ></span>
+          </h1>
+          <div class="flex items-center gap-5">
+            <button
+              type="button"
+              class="ph-bold ph-bell text-xl text-gray-400 transition ease-in-out duration-300 hover:text-gray-900"
+            ></button>
+            <button
+              type="button"
+              class="ph-bold ph-question text-xl text-gray-400 transition ease-in-out duration-300 hover:text-gray-900"
+            ></button>
+            <button type="button" class="w-8 h-8 rounded-full">
+              <img
+                src="./images/pfp.png"
+                alt="Profile Picture"
+                class="w-full h-full object-cover rounded-full"
+              />
+            </button>
+          </div>
+        </div>
+        <div class="flex items-center justify-between my-8 flex-wrap gap-4">
+          <input
+            type="search"
+            id="search-input"
+            placeholder="Search"
+            class="primary-input w-full min-[537px]:basis-[320px]"
+          />
+          <button
+            type="button"
+            id="create-new-project-button"
+            class="button primary-button flex w-full min-[537px]:w-fit items-center justify-center gap-2.5"
+          >
+            <i class="ph-bold ph-plus"></i>
+            New project
+          </button>
+        </div>
+        <nav class="filter-tabs-nav overflow-x-auto pb-2">
+          <ul
+            id="filter-tabs-list"
+            class="flex items-center gap-6 whitespace-nowrap"
+          ></ul>
+        </nav>
+      </header>
+    </div>
+  </body>
 </html>
