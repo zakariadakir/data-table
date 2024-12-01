@@ -1,0 +1,16 @@
+{
+  "name": "data-table",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx tailwindcss -i ./src/input.css -o ./src/output.css",
+    "go": "npx tailwindcss -i ./styles/input.css -o ./styles/output.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.14"
+  }
+}
