@@ -76,6 +76,101 @@
           ></ul>
         </nav>
       </header>
+      <main class="main min-w-full rounded-md overflow-x-auto">
+        <table class="table-auto w-full border-collapse relative">
+          <thead class="bg-[#F7F9FC] sticky top-0 w-full z-30">
+            <tr>
+              <th
+                class="px-2.5 py-3 uppercase font-medium text-xs text-gray-500 min-w-[46px]"
+              >
+                <input
+                  type="checkbox"
+                  id="select-all-projects"
+                  class="checkbox-btn checkbox-btn-all"
+                />
+              </th>
+              <th
+                class="px-2.5 py-3 uppercase font-medium text-xs text-gray-500 min-w-[48px]"
+              >
+                #
+              </th>
+              <th
+                class="px-2.5 py-3 uppercase font-medium text-xs text-gray-500 text-left min-w-[298px] flex items-center"
+              >
+                name
+              </th>
+              <th
+                class="px-2.5 py-3 uppercase font-medium text-xs text-gray-500 min-w-[44px]"
+              >
+                pm
+              </th>
+              <th
+                class="px-2.5 py-3 uppercase font-medium text-xs text-gray-500 min-w-[150px]"
+              >
+                status
+              </th>
+              <th
+                class="px-2.5 py-3 uppercase font-medium text-xs text-gray-500 min-w-[200px]"
+              >
+                last update
+              </th>
+              <th
+                class="px-2.5 py-3 uppercase font-medium text-xs text-gray-500 min-w-[100px]"
+              >
+                resources
+              </th>
+              <th
+                class="px-2.5 py-3 uppercase font-medium text-xs text-gray-500 min-w-[260px]"
+              >
+                project timeline
+              </th>
+              <th
+                class="px-2.5 py-3 uppercase font-medium text-xs text-gray-500 min-w-[140px]"
+              >
+                budget
+              </th>
+              <th class="px-2.5 py-3 min-w-[54px]"></th>
+            </tr>
+          </thead>
+          <tbody id="projects-list"></tbody>
+        </table>
+        <div class="flex items-center justify-between py-3 px-2.5">
+          <span id="page-info" class="font-medium text-xs text-gray-500"
+            >1-20 of 27</span
+          >
+          <div class="flex items-center gap-4">
+            <span class="font-medium text-xs text-gray-500"
+              >Rows per page:
+              <select
+                name="rows-per-page"
+                id="rows-per-page-select"
+                class="text-center"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+              </select>
+            </span>
+            <div class="flex items-center gap-2">
+              <button
+                id="previous-page"
+                class="ph-bold ph-caret-left button secondary-button"
+              ></button>
+              <span id="current-page" class="font-medium text-xs text-gray-500"
+                >1/2</span
+              >
+              <button
+                id="next-page"
+                class="ph-bold ph-caret-right button secondary-button"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   </body>
 </html>

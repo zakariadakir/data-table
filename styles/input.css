@@ -47,3 +47,12 @@
 .filter-tab.active span {
   @apply font-medium;
 }
+.checkbox-btn {
+  @apply w-4 h-4 rounded shadow-custom13 transition-all checked:bg-indigo-500 appearance-none border-none cursor-pointer outline-none duration-150 ease-in hover:shadow-custom5 active:shadow-custom6 relative  checked:after:text-gray-100 checked:after:text-xs checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 checked:after:transform checked:after:translate-x-[-50%] checked:after:translate-y-[-50%] after:scale-0 checked:after:scale-100 after:transition-transform after:duration-150;
+}
+.checkbox-btn-single {
+  @apply checked:after:content-['✓'];
+}
+.checkbox-btn-all {
+  @apply checked:after:content-['-'];
+}

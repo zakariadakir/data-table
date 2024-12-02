@@ -1,15 +1,39 @@
 "use strict";
 
-/*
-todo:
-const allFilterCount = allFilterButton.querySelector('.tab-count');
-*/
+import {
+  createProjectCheckboxCell,
+  createProjectIdCell,
+  createProjectNameCell,
+  createProjectManagerCell,
+  createProjectLastUpdatedCell,
+  createProjectResourcesCell,
+} from "./components.js";
 
 // Data:
-let projectsArray = [
+let projectsArray = JSON.parse(localStorage.getItem("projectsArray")) || [
   {
     id: 1,
     name: "Project 1",
+    status: "On Track",
+    isArchived: false,
+    isSelected: false,
+    manager: "Roger Vaccaro",
+    lastUpdated: "15 Mar 2021, 12:47 PM",
+    resources: ["UX/UI Design", "Frontend", "Backend"],
+  },
+  {
+    id: 2,
+    name: "Project 2",
+    status: "On Track",
+    isArchived: false,
+    isSelected: false,
+    manager: "Roger Vaccaro",
+    lastUpdated: "15 Mar 2021, 12:47 PM",
+    resources: ["UX/UI Design", "Frontend", "Backend"],
+  },
+  {
+    id: 3,
+    name: "Project 3",
     status: "On Track",
     isArchived: false,
     isSelected: false,
@@ -36,11 +60,31 @@ const createNewProjectButton = document.getElementById(
   "create-new-project-button"
 );
 const filterTabsList = document.getElementById("filter-tabs-list");
+const selectAllCheckbox = document.getElementById("select-all-projects");
+const projectsList = document.getElementById("projects-list");
+const pageInfo = document.getElementById("page-info");
+const previousPageButton = document.getElementById("previous-page");
+const nextPageButton = document.getElementById("next-page");
+const currentPageSpan = document.getElementById("current-page");
+const rowsPerPageSelect = document.getElementById("rows-per-page-select");
 
 // Variables:
+let currentSearchTerm = "";
 let selectedFilter = "All";
 
 // Functions:
+const saveProjectsToLocalStorage = () => {
+  localStorage.setItem("projectsArray", JSON.stringify(projectsArray));
+};
+
+const findProjectById = (projectId) => {
+  return projectsArray.find((project) => project.id === projectId);
+};
+
+const isDuplicateProjectName = (projectName) => {
+  return projectsArray.some((project) => project.name === projectName);
+};
+
 const updateProjectsCount = () => {
   projectsCount.textContent = projectsArray.length;
 };
@@ -69,7 +113,8 @@ const handleFilterButtonClick = (filterButton, filterStatus) => {
     filterButton.classList.add("active");
     selectedFilter = filterStatus;
     const filteredProjects = filterProjectsByStatus(selectedFilter);
-    console.log(filteredProjects);
+    renderProjects(filteredProjects);
+    handleProjectSearch(currentSearchTerm);
   });
 };
 
@@ -96,11 +141,76 @@ const handleProjectSearch = (searchTerm) => {
   const searchFilteredProjects = filterProjectsByStatus(selectedFilter).filter(
     (project) => project.name.toLowerCase().includes(searchTerm)
   );
-  console.log(searchFilteredProjects);
+  renderProjects(searchFilteredProjects);
 };
+
+const handleProjectSelection = (projectId, isSelected) => {
+  const projectToUpdate = findProjectById(projectId);
+  if (projectToUpdate) {
+    projectToUpdate.isSelected = isSelected;
+    handleProjectCheckboxToggle();
+    renderProjects();
+  }
+};
+
+const handleSelectAllProjects = () => {
+  projectsArray.forEach((project) => {
+    project.isSelected = selectAllCheckbox.checked;
+  });
+  renderProjects();
+};
+
+const handleProjectCheckboxToggle = () => {
+  const selectedCount = projectsArray.filter(
+    (project) => project.isSelected
+  ).length;
+  if (selectedCount >= 2) {
+    selectAllCheckbox.checked = true;
+    selectAllCheckbox.indeterminate = false;
+  } else {
+    selectAllCheckbox.checked = false;
+    selectAllCheckbox.indeterminate = selectedCount === 1;
+  }
+};
+
+const createCell = () => {
+  const cell = document.createElement("td");
+  return cell;
+};
+
+const renderProjects = (filteredProjects = projectsArray) => {
+  projectsList.innerHTML = "";
+  if (filteredProjects.length > 0) {
+    filteredProjects.forEach((project) => {
+      const projectRow = document.createElement("tr");
+      projectRow.classList.add("hover:bg-[#F7F9FC]");
+      if (project.isSelected) {
+        projectRow.classList.add("bg-[#EDEDFC]");
+      }
+      projectRow.appendChild(
+        createProjectCheckboxCell(
+          project.isSelected,
+          project.id,
+          handleProjectSelection
+        )
+      );
+      projectRow.appendChild(createProjectIdCell(project.id));
+      projectRow.appendChild(createProjectNameCell(project.name));
+      projectRow.appendChild(createProjectManagerCell(project.manager));
+      projectRow.appendChild(createCell());
+      projectRow.appendChild(createProjectLastUpdatedCell(project.lastUpdated));
+      projectRow.appendChild(createProjectResourcesCell(project.resources));
+      projectsList.appendChild(projectRow);
+    });
+  } else {
+    projectsList.innerHTML = `<tr class="w-full"><td class="text-center text-sm text-gray-900 py-3" colspan="100%">No projects found.</td></tr>`;
+  }
+};
+renderProjects();
 
 // Event listeners:
 searchInput.addEventListener("input", () => {
-  let currentSearchTerm = searchInput.value.trim().toLowerCase();
+  currentSearchTerm = searchInput.value.trim().toLowerCase();
   handleProjectSearch(currentSearchTerm);
 });
+selectAllCheckbox.addEventListener("change", handleSelectAllProjects);
