@@ -41,6 +41,26 @@ let projectsArray = JSON.parse(localStorage.getItem("projectsArray")) || [
     lastUpdated: "15 Mar 2021, 12:47 PM",
     resources: ["UX/UI Design", "Frontend", "Backend"],
   },
+  {
+    id: 4,
+    name: "Project 4",
+    status: "On Track",
+    isArchived: false,
+    isSelected: false,
+    manager: "Leo Gouse",
+    lastUpdated: "15 Mar 2021, 12:47 PM",
+    resources: ["UX/UI Design", "Frontend", "Backend"],
+  },
+  {
+    id: 5,
+    name: "Project 5",
+    status: "On Track",
+    isArchived: false,
+    isSelected: false,
+    manager: "Leo Gouse",
+    lastUpdated: "15 Mar 2021, 12:47 PM",
+    resources: ["UX/UI Design", "Frontend", "Backend"],
+  },
 ];
 
 let projectStatusArray = [
@@ -150,7 +170,6 @@ const handleProjectSelection = (projectId, isSelected) => {
     projectToUpdate.isSelected = isSelected;
     handleProjectCheckboxToggle();
   }
-  console.table(projectsArray);
 };
 
 const handleSelectAllProjects = () => {
@@ -161,20 +180,18 @@ const handleSelectAllProjects = () => {
   checkboxes.forEach((checkbox) => {
     checkbox.checked = selectAllCheckbox.checked;
   });
-  console.table(projectsArray);
+handleProjectCheckboxToggle();
 };
 
 const handleProjectCheckboxToggle = () => {
-  const selectedCount = projectsArray.filter(
-    (project) => project.isSelected
-  ).length;
-  if (selectedCount >= 2) {
-    selectAllCheckbox.checked = true;
-    selectAllCheckbox.indeterminate = false;
-  } else {
-    selectAllCheckbox.checked = false;
-    selectAllCheckbox.indeterminate = selectedCount === 1;
-  }
+  const allSelected = projectsArray.every(project => project.isSelected);
+  const anySelected = projectsArray.some(project => project.isSelected);
+  console.log(allSelected, anySelected);
+  console.log(selectAllCheckbox.checked);
+  selectAllCheckbox.checked = anySelected;
+  console.log(selectAllCheckbox.checked);
+  selectAllCheckbox.classList.toggle("checked:after:content-['✓']", allSelected);
+  selectAllCheckbox.classList.toggle("checked:after:content-['-']", !allSelected && anySelected);
 };
 
 const createCell = () => {

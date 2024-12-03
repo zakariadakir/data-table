@@ -53,12 +53,9 @@
 .checkbox-btn-single {
   @apply checked:after:content-['✓'];
 }
-.checkbox-btn-all {
-  @apply checked:after:content-['-'];
-}
 .project-row:has(input[type="checkbox"]:checked) {
   @apply bg-[#EDEDFC];
 }
 .project-row:nth-child(odd) {
-  @apply border-y border-[#E9EDF5]
+  @apply border-y border-[#E9EDF5];
 }

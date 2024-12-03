@@ -748,10 +748,6 @@ video {
   border-bottom-width: 1px;
 }
 
-.border-t {
-  border-top-width: 1px;
-}
-
 .border-\[\#D2D5DC80\] {
   border-color: #D2D5DC80;
 }
@@ -1244,11 +1240,6 @@ video {
   content: var(--tw-content);
 }
 
-.checkbox-btn-all:checked::after {
-  --tw-content: '-';
-  content: var(--tw-content);
-}
-
 .project-row:has(input[type="checkbox"]:checked) {
   --tw-bg-opacity: 1;
   background-color: rgb(237 237 252 / var(--tw-bg-opacity));
@@ -1259,6 +1250,16 @@ video {
   border-bottom-width: 1px;
   --tw-border-opacity: 1;
   border-color: rgb(233 237 245 / var(--tw-border-opacity));
+}
+
+.checked\:after\:content-\[\'-\'\]:checked::after {
+  --tw-content: '-';
+  content: var(--tw-content);
+}
+
+.checked\:after\:content-\[\'\2713\'\]:checked::after {
+  --tw-content: '✓';
+  content: var(--tw-content);
 }
 
 .hover\:bg-\[\#F7F9FC\]:hover {
