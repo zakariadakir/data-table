@@ -591,6 +591,10 @@ video {
   display: none;
 }
 
+.h-6 {
+  height: 1.5rem;
+}
+
 .h-8 {
   height: 2rem;
 }
@@ -599,12 +603,12 @@ video {
   height: 100%;
 }
 
-.h-6 {
-  height: 1.5rem;
-}
-
 .min-h-full {
   min-height: 100%;
+}
+
+.w-6 {
+  width: 1.5rem;
 }
 
 .w-8 {
@@ -613,10 +617,6 @@ video {
 
 .w-full {
   width: 100%;
-}
-
-.w-6 {
-  width: 1.5rem;
 }
 
 .min-w-\[100px\] {
@@ -687,6 +687,10 @@ video {
   justify-content: space-between;
 }
 
+.gap-1\.5 {
+  gap: 0.375rem;
+}
+
 .gap-2 {
   gap: 0.5rem;
 }
@@ -705,14 +709,6 @@ video {
 
 .gap-6 {
   gap: 1.5rem;
-}
-
-.gap-1\.5 {
-  gap: 0.375rem;
-}
-
-.overflow-hidden {
-  overflow: hidden;
 }
 
 .overflow-x-auto {
@@ -751,6 +747,11 @@ video {
   border-color: #D2D5DC80;
 }
 
+.bg-\[\#E9EDF5\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(233 237 245 / var(--tw-bg-opacity));
+}
+
 .bg-\[\#EDEDFC\] {
   --tw-bg-opacity: 1;
   background-color: rgb(237 237 252 / var(--tw-bg-opacity));
@@ -776,11 +777,6 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-\[\#E9EDF5\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(233 237 245 / var(--tw-bg-opacity));
-}
-
 .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -800,9 +796,19 @@ video {
   padding-right: 1.25rem;
 }
 
+.px-\[7px\] {
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
 .py-0\.5 {
   padding-top: 0.125rem;
   padding-bottom: 0.125rem;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 .py-3 {
@@ -813,16 +819,6 @@ video {
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
-}
-
-.px-\[7px\] {
-  padding-left: 7px;
-  padding-right: 7px;
-}
-
-.py-1 {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
 }
 
 .pb-2 {
@@ -846,6 +842,10 @@ video {
   line-height: 2rem;
 }
 
+.text-\[10px\] {
+  font-size: 10px;
+}
+
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -859,10 +859,6 @@ video {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
-}
-
-.text-\[10px\] {
-  font-size: 10px;
 }
 
 .font-bold {
@@ -1237,6 +1233,11 @@ video {
 .checkbox-btn-all:checked::after {
   --tw-content: '-';
   content: var(--tw-content);
+}
+
+.project-row:has(input[type="checkbox"]:checked) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(237 237 252 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-\[\#F7F9FC\]:hover {

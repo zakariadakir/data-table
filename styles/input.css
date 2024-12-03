@@ -56,3 +56,6 @@
 .checkbox-btn-all {
   @apply checked:after:content-['-'];
 }
+.project-row:has(input[type="checkbox"]:checked) {
+  @apply bg-[#EDEDFC];
+}

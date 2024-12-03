@@ -149,15 +149,19 @@ const handleProjectSelection = (projectId, isSelected) => {
   if (projectToUpdate) {
     projectToUpdate.isSelected = isSelected;
     handleProjectCheckboxToggle();
-    renderProjects();
   }
+  console.table(projectsArray);
 };
 
 const handleSelectAllProjects = () => {
   projectsArray.forEach((project) => {
     project.isSelected = selectAllCheckbox.checked;
   });
-  renderProjects();
+  const checkboxes = document.querySelectorAll(".checkbox-btn-single");
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = selectAllCheckbox.checked;
+  });
+  console.table(projectsArray);
 };
 
 const handleProjectCheckboxToggle = () => {
@@ -183,10 +187,7 @@ const renderProjects = (filteredProjects = projectsArray) => {
   if (filteredProjects.length > 0) {
     filteredProjects.forEach((project) => {
       const projectRow = document.createElement("tr");
-      projectRow.classList.add("hover:bg-[#F7F9FC]");
-      if (project.isSelected) {
-        projectRow.classList.add("bg-[#EDEDFC]");
-      }
+      projectRow.classList.add("hover:bg-[#F7F9FC]", "project-row");
       projectRow.appendChild(
         createProjectCheckboxCell(
           project.isSelected,
