@@ -71,5 +71,44 @@
         ></ul>
       </nav>
     </header>
+    <main>
+      <div class="table-wrapper">
+        <table class="table-auto w-full h-full border-collapse">
+          <thead
+            class="bg-gray-0 sticky top-0 w-full z-20 border-gray-1 table-header-styles"
+          >
+            <tr>
+              <th class="px-2.5 py-3 min-w-[48px]">
+                <button
+                  type="button"
+                  class="sort-btn"
+                  data-click-count="0"
+                  data-sort-key="rowIndex"
+                  data-active="false"
+                  data-order="none"
+                  aria-label="Sort by row index"
+                >
+                  #<i class="ph ph-arrow-circle-up text-lg"></i>
+                </button>
+              </th>
+              <th class="px-2.5 py-3 text-left min-w-[298px]">
+                <button
+                  type="button"
+                  class="sort-btn"
+                  data-click-count="0"
+                  data-sort-key="name"
+                  data-active="false"
+                  data-order="none"
+                  aria-label="Sort by name"
+                >
+                  Project Name<i class="ph ph-arrow-circle-up text-lg"></i>
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="projects-wrapper"></tbody>
+        </table>
+      </div>
+    </main>
   </body>
 </html>

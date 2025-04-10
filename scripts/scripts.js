@@ -3,17 +3,24 @@
 // Data:
 import { projectStatusesArr, defaultProjectsArr } from "./data.js";
 
+// Components:
+import { createProjectRow } from "./components.js";
+
 // DOM Elements:
 const totalProjectsCount = document.getElementById("total-projects-count");
 const searchProjectInput = document.getElementById("search-project-input");
 const addProjectBtn = document.getElementById("add-project-btn");
 const filterStatusTabsWrapper = document.getElementById("filter-status-tabs");
+const projectsWrapper = document.getElementById("projects-wrapper");
+const sortBtns = document.querySelectorAll(".sort-btn");
 
 // States:
 export const storedProjectsArr =
   JSON.parse(localStorage.getItem("projects")) || defaultProjectsArr;
 let activeSearchTerm = "";
 let activeStatusFilter = "All";
+let sortKey = "";
+let sortOrder = "";
 
 // Functions:
 const updateTotalProjectsCount = () => {
@@ -37,7 +44,7 @@ const handleFilterTabClick = (tabButton, status) => {
     });
     tabButton.setAttribute("data-active", "true");
     activeStatusFilter = status;
-    console.table(filterProjectsByStatus(status));
+    renderFilteredAndSortedProjects();
   });
 };
 
@@ -55,25 +62,84 @@ const renderFilterStatusTabs = () => {
   });
 };
 
-const renderFilteredProjects = () => {
+const renderFilteredAndSortedProjects = () => {
   const filteredProjects = filterProjectsByStatus(activeStatusFilter).filter(
     (project) =>
       project.name.toLowerCase().includes(activeSearchTerm.toLowerCase())
   );
-  console.table(filteredProjects);
+  renderProjects(
+    filteredProjects.sort((a, b) => {
+      return compareValues(a[sortKey], b[sortKey], sortOrder === "asc");
+    })
+  );
+};
+
+const renderProjects = (arr) => {
+  projectsWrapper.innerHTML = "";
+  if (arr.length === 0) {
+    projectsWrapper.innerHTML = `<tr><td class="text-sm text-gray-900 py-3 px-2.5" colspan="100%">No projects found.</td></tr>`;
+  } else {
+    arr.forEach((project) => {
+      const row = createProjectRow(project);
+      projectsWrapper.appendChild(row);
+    });
+  }
+};
+
+const compareValues = (a, b, ascending) => {
+  if (typeof a === "number" && typeof b === "number") {
+    return ascending ? a - b : b - a;
+  }
+  if (typeof a === "string" && typeof b === "string") {
+    return ascending ? a.localeCompare(b) : b.localeCompare(a);
+  }
+};
+
+const sortProjectsByButton = () => {
+  sortBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      sortBtns.forEach((otherBtn) => {
+        if (otherBtn !== btn) {
+          otherBtn.dataset.clickCount = "0";
+          otherBtn.dataset.active = "false";
+          otherBtn.dataset.order = "none";
+        }
+      });
+      let clickCount = parseInt(btn.dataset.clickCount, 10) + 1;
+      btn.dataset.clickCount = clickCount.toString();
+      sortKey = btn.dataset.sortKey;
+      if (clickCount % 3 === 1) {
+        btn.dataset.active = "true";
+        btn.dataset.order = "asc";
+        sortOrder = "asc";
+      } else if (clickCount % 3 === 2) {
+        btn.dataset.order = "desc";
+        sortOrder = "desc";
+      } else {
+        btn.dataset.clickCount = "0";
+        btn.dataset.active = "false";
+        btn.dataset.order = "none";
+        sortKey = "";
+        sortOrder = "";
+      }
+      console.log(clickCount % 3, sortKey, sortOrder, clickCount);
+      renderFilteredAndSortedProjects();
+    });
+  });
 };
 
 const refreshUI = () => {
   updateTotalProjectsCount();
   renderFilterStatusTabs();
-  renderFilteredProjects();
+  renderFilteredAndSortedProjects();
 };
 
 // Initial Setup:
+sortProjectsByButton();
 refreshUI();
 
 // Event Listeners:
 searchProjectInput.addEventListener("input", (e) => {
   activeSearchTerm = e.target.value.toLowerCase();
-  renderFilteredProjects();
+  renderFilteredAndSortedProjects();
 });

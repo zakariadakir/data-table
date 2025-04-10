@@ -38,3 +38,14 @@
 .filter-status-tab[data-active="true"] span {
   @apply font-bold;
 }
+
+/* Sorting */
+.sort-btn {
+  @apply inline-flex items-center gap-1 uppercase font-medium text-xs text-gray-500;
+}
+.sort-btn[data-active="true"] {
+  @apply text-gray-900;
+}
+.sort-btn[data-active="true"][data-order="desc"] i {
+  @apply rotate-180;
+}
