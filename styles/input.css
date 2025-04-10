@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn {
+  @apply text-sm font-medium text-center px-3 py-1 rounded-md transition-all duration-300 ease-in-out cursor-pointer;
+}
+.primary-btn {
+  @apply text-white bg-indigo-500 shadow-primary-btn-default hover:shadow-primary-btn-hover hover:bg-indigo-600 active:shadow-primary-btn-active disabled:bg-indigo-400 disabled:shadow-primary-btn-disabled disabled:text-indigo-0;
+}
+.secondary-btn {
+  @apply text-gray-700 bg-white shadow-secondary-btn-default hover:text-gray-900 hover:shadow-secondary-btn-hover active:shadow-secondary-btn-active disabled:bg-gray-0 disabled:shadow-secondary-btn-disabled disabled:text-gray-400;
+}
+.danger-btn {
+  @apply text-white bg-red-500 shadow-danger-btn-default hover:bg-red-600 hover:shadow-danger-btn-hover active:shadow-danger-btn-active;
+}
+.primary-input {
+  @apply rounded-md px-3 py-1.5 text-sm bg-white text-gray-900 placeholder:text-gray-700 outline-none shadow-primary-input-default transition-all duration-300 ease-in-out hover:shadow-primary-input-hover focus:shadow-primary-input-focus;
+}
+
+/* Navigation */
+.filter-status-navigation {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.filter-status-navigation::-webkit-scrollbar {
+  display: none;
+}
+.filter-status-tab {
+  @apply flex items-center gap-1 text-gray-700 font-medium text-sm transition-all duration-300 ease-in-out relative hover:text-indigo-500 after:content-[""] after:absolute after:-bottom-2 after:left-0 after:h-[2.5px] after:bg-indigo-500;
+}
+.filter-status-tab[data-active="true"] {
+  @apply font-bold text-indigo-500 after:w-full;
+}
+.filter-status-tab span {
+  @apply bg-gray-1 px-1.5 rounded-xl text-[10px];
+}
+.filter-status-tab[data-active="true"] span {
+  @apply font-bold;
+}
