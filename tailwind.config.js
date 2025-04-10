@@ -52,6 +52,8 @@ module.exports = {
           "0px 0px 0px 1px rgba(134, 143, 160, 0.4),0px 1px 2px 0px rgba(0, 0, 0, 0.06)",
         "primary-input-focus":
           "0px 0px 0px 4px rgba(94, 90, 219, 0.4),0px 0px 0px 1px rgba(134, 143, 160, 0.32),0px 1px 2px 0px rgba(0, 0, 0, 0.06)",
+        "project-deletion-form":
+          "0px 10px 30px 0px rgba(0, 0, 0, 0.2),0px 30px 70px -10px rgba(17, 24, 38, 0.25),0px 0px 0px 1px rgba(152, 161, 178, 0.1)",
       },
     },
   },

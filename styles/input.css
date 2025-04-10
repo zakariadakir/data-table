@@ -49,3 +49,12 @@
 .sort-btn[data-active="true"][data-order="desc"] i {
   @apply rotate-180;
 }
+
+/* Actions Cell */
+.project-row:has(.project-actions-dropdown) {
+  @apply bg-gray-0;
+}
+.project-row:has(.project-actions-dropdown) .menu-toggle-btn,
+.project-row:hover .menu-toggle-btn {
+  @apply block;
+}

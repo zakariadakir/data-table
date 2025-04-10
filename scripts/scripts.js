@@ -27,7 +27,7 @@ const updateTotalProjectsCount = () => {
   totalProjectsCount.textContent = storedProjectsArr.length;
 };
 
-const filterProjectsByStatus = (status) => {
+export const filterProjectsByStatus = (status) => {
   if (status === "All") return storedProjectsArr;
   if (status === "Archived")
     return storedProjectsArr.filter((project) => project.isArchived);
@@ -48,7 +48,7 @@ const handleFilterTabClick = (tabButton, status) => {
   });
 };
 
-const renderFilterStatusTabs = () => {
+export const renderFilterStatusTabs = () => {
   filterStatusTabsWrapper.innerHTML = "";
   projectStatusesArr.forEach((status) => {
     const isActive = status === activeStatusFilter;
@@ -122,7 +122,6 @@ const sortProjectsByButton = () => {
         sortKey = "";
         sortOrder = "";
       }
-      console.log(clickCount % 3, sortKey, sortOrder, clickCount);
       renderFilteredAndSortedProjects();
     });
   });
