@@ -4,7 +4,7 @@
 import { projectStatusesArr, defaultProjectsArr } from "./data.js";
 
 // Components:
-import { createProjectRow } from "./components.js";
+import { openAddProjectForm, createProjectRow } from "./components.js";
 
 // DOM Elements:
 const totalProjectsCount = document.getElementById("total-projects-count");
@@ -15,7 +15,7 @@ const projectsWrapper = document.getElementById("projects-wrapper");
 const sortBtns = document.querySelectorAll(".sort-btn");
 
 // States:
-export const storedProjectsArr =
+export let storedProjectsArr =
   JSON.parse(localStorage.getItem("projects")) || defaultProjectsArr;
 let activeSearchTerm = "";
 let activeStatusFilter = "All";
@@ -27,7 +27,21 @@ const updateTotalProjectsCount = () => {
   totalProjectsCount.textContent = storedProjectsArr.length;
 };
 
-export const filterProjectsByStatus = (status) => {
+export const removeProjectAndUpdateUI = (projectId) => {
+  storedProjectsArr = storedProjectsArr.filter(
+    (project) => project.id !== projectId
+  );
+  localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
+  refreshUI();
+};
+
+export const archiveProjectAndUpdateUI = (project) => {
+  project.isArchived = !project.isArchived;
+  localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
+  refreshUI();
+};
+
+const filterProjectsByStatus = (status) => {
   if (status === "All") return storedProjectsArr;
   if (status === "Archived")
     return storedProjectsArr.filter((project) => project.isArchived);
@@ -48,7 +62,7 @@ const handleFilterTabClick = (tabButton, status) => {
   });
 };
 
-export const renderFilterStatusTabs = () => {
+const renderFilterStatusTabs = () => {
   filterStatusTabsWrapper.innerHTML = "";
   projectStatusesArr.forEach((status) => {
     const isActive = status === activeStatusFilter;
@@ -141,4 +155,8 @@ refreshUI();
 searchProjectInput.addEventListener("input", (e) => {
   activeSearchTerm = e.target.value.toLowerCase();
   renderFilteredAndSortedProjects();
+});
+
+addProjectBtn.addEventListener("click", () => {
+  openAddProjectForm();
 });

@@ -1,12 +1,15 @@
 "use strict";
 
 // Scripts:
-import { renderFilterStatusTabs } from "./scripts.js";
+import {
+  removeProjectAndUpdateUI,
+  archiveProjectAndUpdateUI,
+} from "./scripts.js";
 
-const createOverlay = (actionType) => {
+const createOverlay = (type) => {
   const overlay = document.createElement("div");
   overlay.className = `fixed top-0 left-0 w-full h-full z-[99]  ${
-    actionType === "add" || actionType === "edit"
+    type === "add" || type === "edit"
       ? "opacity-50 bg-black"
       : "opacity-10 bg-red-500"
   }`;
@@ -14,7 +17,7 @@ const createOverlay = (actionType) => {
 };
 
 // Forms:
-const createDeleteProjectModal = (project) => {
+const openDeleteProjectModal = (project) => {
   const form = document.createElement("form");
   const overlay = createOverlay("delete");
   form.className =
@@ -29,22 +32,112 @@ const createDeleteProjectModal = (project) => {
   </div>
   <span class="block w-full h-px bg-gray-1"></span>
   <div class="px-5 py-4 flex justify-end gap-5">
-    <button type="button" class="btn secondary-btn" id="cancel-btn">Cancel</button>
+    <button type="button" class="btn secondary-btn cancel-btn">Cancel</button>
     <button type="submit" class="btn danger-btn">Delete</button>
   </div>
   `;
-  const cancelBtn = form.querySelector("#cancel-btn");
+  const cancelBtn = form.querySelector(".cancel-btn");
   cancelBtn.addEventListener("click", () => {
     overlay.remove();
     form.remove();
   });
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+    removeProjectAndUpdateUI(project.id);
     overlay.remove();
     form.remove();
   });
-  document.body.appendChild(overlay);
-  document.body.appendChild(form);
+  document.body.append(overlay, form);
+};
+
+const createFormHeader = (formType) => {
+  const header = document.createElement("h2");
+  header.className =
+    "text-gray-900 bg-white text-base font-medium leading-5 px-5 py-4";
+  header.textContent = formType === "add" ? "Add New Project" : "Edit Project";
+  return header;
+};
+
+const validateProjectName = (projectName, currentName = "") => {
+  projectName = projectName.trim();
+  if (!projectName) return "Project name is required.";
+  if (projectName.length < 5)
+    return "Project name must be at least 5 letters long.";
+  if (!/^[a-zA-Z ]+$/.test(projectName))
+    return "Project name must contain only letters and spaces.";
+  if (isDuplicateProjectName(projectName, currentName))
+    return "Project name already exists.";
+  return "";
+};
+
+const createProjectNameField = (formType, project) => {
+  const container = document.createElement("div");
+  container.className = "flex flex-col gap-2";
+  const projectName = formType === "add" ? "" : project.name;
+  container.innerHTML = `
+    <label for="projectName" class="text-sm font-medium leading-5 text-gray-700 cursor-pointer">
+      Project name <span class="text-indigo-500">*</span>
+    </label>
+    <input type="text" id="projectName" class="primary-input input-project-name" value="${projectName}">
+    <p class="text-red-500 text-xs error-msg"></p>
+  `;
+  const inputName = container.querySelector(".input-project-name");
+  const errorMsg = container.querySelector(".error-msg");
+  inputName.addEventListener("input", () => {
+    errorMsg.textContent = validateProjectName(inputName.value, projectName);
+  });
+  return container;
+};
+
+const createFormBody = (formType, project) => {
+  const body = document.createElement("div");
+  body.className = "flex flex-col gap-8 px-5 py-4 bg-gray-0";
+  const projectNameField = createProjectNameField(formType, project);
+  body.appendChild(projectNameField);
+  return body;
+};
+
+const createFormFooter = (formType) => {
+  const footer = document.createElement("div");
+  footer.className =
+    "bg-white px-5 py-4 flex gap-5 justify-end items-center rounded-bl-xl rounded-br-xl";
+  const btnText = formType === "add" ? "Add project" : "Save changes";
+  footer.innerHTML = `
+    <button type="button" class="btn secondary-btn cancel-btn">Cancel</button>
+    <button type="submit" ${
+      formType === "edit" ? "" : "disabled"
+    } class="btn primary-btn submit-btn">${btnText}</button>
+  `;
+  return footer;
+};
+
+const handleCancelBtn = (cancelBtn, form, overlay) => {
+  cancelBtn.addEventListener("click", () => {
+    form.remove();
+    overlay.remove();
+  });
+};
+
+const createProjectForm = (formType, project = {}) => {
+  const form = document.createElement("form");
+  form.className =
+    "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-[90%] min-[497px]:max-w-[440px] w-full shadow-project-form rounded-xl z-[100] overflow-hidden";
+  const header = createFormHeader(formType);
+  const body = createFormBody(formType, project);
+  const footer = createFormFooter(formType);
+  form.append(header, body, footer);
+  const overlay = createOverlay(formType);
+  const cancelBtn = form.querySelector(".cancel-btn");
+  handleCancelBtn(cancelBtn, form, overlay);
+  document.body.append(overlay, form);
+};
+
+export const openAddProjectForm = () => {
+  createProjectForm("add");
+};
+
+const openEditProjectForm = (project) => {
+  createProjectForm("edit", project);
 };
 
 // Table:
@@ -85,24 +178,24 @@ const createProjectActionsCell = (project) => {
   const cell = document.createElement("td");
   cell.className = "py-3 px-2.5";
   cell.innerHTML = `
-  <div class="dropdown-container w-fit mx-auto relative">
+  <div class="menu-container w-fit mx-auto relative">
     <button type="button" class="menu-toggle-btn ph-bold ph-dots-three-vertical text-gray-400 p-1 rounded transition-all duration-300 ease-in-out hover:bg-indigo-0 hover:text-gray-700 hidden" aria-label="More options"></button>
   </div>
   `;
-  const dropdownContainer = cell.querySelector(".dropdown-container");
+  const menuContainer = cell.querySelector(".menu-container");
   const menuToggleBtn = cell.querySelector(".menu-toggle-btn");
   menuToggleBtn.addEventListener("click", () => {
-    const dropdown = createProjectActionsDropdown(project, dropdownContainer);
-    dropdownContainer.appendChild(dropdown);
+    const actionsMenu = createProjectActionsMenu(project, menuContainer);
+    menuContainer.appendChild(actionsMenu);
   });
   return cell;
 };
 
-const createProjectActionsDropdown = (project, dropdownContainer) => {
-  const dropdown = document.createElement("ul");
-  dropdown.className =
-    "project-actions-dropdown absolute right-0 bg-white py-2 px-1.5 rounded-md z-10 shadow-16";
-  dropdown.innerHTML = `
+const createProjectActionsMenu = (project, container) => {
+  const menu = document.createElement("ul");
+  menu.className =
+    "project-actions-menu absolute right-0 bg-white py-2 px-1.5 rounded-md z-10 shadow-16";
+  menu.innerHTML = `
   <li>
     <button type="button" class="edit-btn px-2.5 py-1 w-full hover:bg-indigo-0 rounded-md text-left font-medium text-sm text-gray-700">Edit</button>
   </li>
@@ -115,29 +208,26 @@ const createProjectActionsDropdown = (project, dropdownContainer) => {
     <button type="button" class="delete-btn px-2.5 py-1 w-full hover:bg-indigo-0 rounded-md text-left font-medium text-sm text-red-500">Delete</button>
   </li>
   `;
-  const editBtn = dropdown.querySelector(".edit-btn");
-  const archiveBtn = dropdown.querySelector(".archive-btn");
-  const deleteBtn = dropdown.querySelector(".delete-btn");
-  editBtn.addEventListener("click", () => {
-    dropdown.remove();
-  });
-  archiveBtn.addEventListener("click", () => {
-    project.isArchived = !project.isArchived;
-    renderFilterStatusTabs();
-    console.log(`project is ${project.isArchived ? "archived" : "unarchived"}`);
-    dropdown.remove();
-  });
-  deleteBtn.addEventListener("click", () => {
-    createOverlay("delete");
-    createDeleteProjectModal(project);
-    dropdown.remove();
-  });
+  const addEventListenerToButton = (selector, action) => {
+    const button = menu.querySelector(selector);
+    button.addEventListener("click", () => {
+      action();
+      menu.remove();
+    });
+  };
+  addEventListenerToButton(".edit-btn", () => openEditProjectForm(project));
+  addEventListenerToButton(".archive-btn", () =>
+    archiveProjectAndUpdateUI(project)
+  );
+  addEventListenerToButton(".delete-btn", () =>
+    openDeleteProjectModal(project)
+  );
   const closeDropdown = (event) => {
-    if (!dropdownContainer.contains(event.target)) {
-      dropdown.remove();
+    if (!container.contains(event.target)) {
+      menu.remove();
       document.removeEventListener("click", closeDropdown);
     }
   };
   document.addEventListener("click", closeDropdown);
-  return dropdown;
+  return menu;
 };

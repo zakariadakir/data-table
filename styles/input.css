@@ -51,10 +51,10 @@
 }
 
 /* Actions Cell */
-.project-row:has(.project-actions-dropdown) {
+.project-row:has(.project-actions-menu) {
   @apply bg-gray-0;
 }
-.project-row:has(.project-actions-dropdown) .menu-toggle-btn,
+.project-row:has(.project-actions-menu) .menu-toggle-btn,
 .project-row:hover .menu-toggle-btn {
   @apply block;
 }
