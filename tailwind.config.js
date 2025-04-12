@@ -56,6 +56,10 @@ module.exports = {
           "0px 10px 30px 0px rgba(0, 0, 0, 0.2),0px 30px 70px -10px rgba(17, 24, 38, 0.25),0px 0px 0px 1px rgba(152, 161, 178, 0.1)",
         "project-form":
           "0px 10px 30px 0px rgba(0, 0, 0, 0.2),0px 30px 70px 0px rgba(26, 34, 64, 0.15),0px 0px 0px 1px rgba(136, 143, 170, 0.1);",
+        "project-actions-menu":
+          "0px 5px 15px 0px rgba(0, 0, 0, 0.08),0px 15px 35px -5px rgba(17, 24, 38, 0.15),0px 0px 0px 1px rgba(152, 161, 179, 0.1)",
+        "toast-notification":
+          "0px 5px 15px 0px rgba(0, 0, 0, 0.25),0px 15px 35px -5px rgba(17, 24, 38, 0.5),0px 0px 0px 0.5px rgba(255, 255, 255, 0.4)",
       },
     },
   },
