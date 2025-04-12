@@ -62,7 +62,10 @@
           New Project
         </button>
       </div>
-      <nav class="overflow-x-auto pb-2 filter-status-navigation" aria-label="Filter project status">
+      <nav
+        class="overflow-x-auto pb-2 filter-status-navigation"
+        aria-label="Filter project status"
+      >
         <ul
           id="filter-status-tabs"
           class="flex items-center gap-6 whitespace-nowrap"
@@ -102,6 +105,19 @@
                   aria-label="Sort by name"
                 >
                   Project Name<i class="ph ph-arrow-circle-up text-lg"></i>
+                </button>
+              </th>
+              <th class="px-2.5 py-3 min-w-[200px]">
+                <button
+                  type="button"
+                  class="sort-btn"
+                  data-click-count="0"
+                  data-sort-key="lastUpdated"
+                  data-active="false"
+                  data-order="none"
+                  aria-label="Sort by last update"
+                >
+                  Last update<i class="ph ph-arrow-circle-up text-lg"></i>
                 </button>
               </th>
               <th class="px-2.5 py-3 min-w-[54px]"></th>

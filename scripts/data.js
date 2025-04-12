@@ -18,6 +18,7 @@ export const defaultProjectsArr = [
     pm: "Leo Gouse",
     isArchived: false,
     status: "On Track",
+    lastUpdated: "15 Mar 2021, 12:47 PM",
   },
   {
     isSelected: false,
@@ -27,6 +28,7 @@ export const defaultProjectsArr = [
     pm: "Leo Gouse",
     isArchived: false,
     status: "On Track",
+    lastUpdated: "15 Mar 2021, 12:48 PM",
   },
   {
     isSelected: false,
@@ -36,6 +38,7 @@ export const defaultProjectsArr = [
     pm: "Leo Gouse",
     isArchived: false,
     status: "On Track",
+    lastUpdated: "15 Mar 2021, 12:46 PM",
   },
   {
     isSelected: false,
@@ -45,6 +48,7 @@ export const defaultProjectsArr = [
     pm: "Tatiana Dias",
     isArchived: true,
     status: "On Hold",
+    lastUpdated: "15 Mar 2023, 12:47 PM",
   },
   {
     isSelected: false,
@@ -54,5 +58,6 @@ export const defaultProjectsArr = [
     pm: "Tatiana Dias",
     isArchived: false,
     status: "On Hold",
+    lastUpdated: "15 Mar 2021, 12:47 PM",
   },
 ];

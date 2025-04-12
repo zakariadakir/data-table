@@ -115,6 +115,13 @@ const compareValues = (a, b, ascending) => {
     return ascending ? a - b : b - a;
   }
   if (typeof a === "string" && typeof b === "string") {
+    const dateA = new Date(a);
+    const dateB = new Date(b);
+    const isValidDateA = !isNaN(dateA);
+    const isValidDateB = !isNaN(dateB);
+    if (isValidDateA && isValidDateB) {
+      return ascending ? dateA - dateB : dateB - dateA;
+    }
     return ascending ? a.localeCompare(b) : b.localeCompare(a);
   }
 };
