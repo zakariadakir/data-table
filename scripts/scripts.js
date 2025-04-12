@@ -4,7 +4,11 @@
 import { projectStatusesArr, defaultProjectsArr } from "./data.js";
 
 // Components:
-import { openAddProjectForm, createProjectRow } from "./components.js";
+import {
+  showToastNotification,
+  openAddProjectForm,
+  createProjectRow,
+} from "./components.js";
 
 // DOM Elements:
 const totalProjectsCount = document.getElementById("total-projects-count");
@@ -32,12 +36,18 @@ export const removeProjectAndUpdateUI = (projectId) => {
     (project) => project.id !== projectId
   );
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
+  showToastNotification("Project deleted successfully");
   refreshUI();
 };
 
 export const archiveProjectAndUpdateUI = (project) => {
   project.isArchived = !project.isArchived;
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
+  showToastNotification(
+    project.isArchived
+      ? "Project archived successfully"
+      : "Project unarchived successfully"
+  );
   refreshUI();
 };
 
