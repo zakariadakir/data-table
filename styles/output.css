@@ -1318,6 +1318,17 @@ video {
   font-weight: 700;
 }
 
+/* Table */
+
+.table-wrapper {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
 /* Sorting */
 
 .sort-btn {

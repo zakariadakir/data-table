@@ -39,6 +39,15 @@
   @apply font-bold;
 }
 
+/* Table */
+.table-wrapper {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.table-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
 /* Sorting */
 .sort-btn {
   @apply inline-flex items-center gap-1 uppercase font-medium text-xs text-gray-500;
