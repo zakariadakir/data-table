@@ -214,7 +214,7 @@ const createProjectActionsCell = (project) => {
 const createProjectActionsMenu = (project, container) => {
   const menu = document.createElement("ul");
   menu.className =
-    "project-actions-menu absolute right-0 bg-white py-2 px-1.5 rounded-md z-10 shadow-project-actions-menu";
+    "project-actions-menu absolute top-0 right-0 bg-white py-2 px-1.5 rounded-md z-10 shadow-project-actions-menu";
   menu.innerHTML = `
   <li>
     <button type="button" class="edit-btn px-2.5 py-1 w-full hover:bg-indigo-0 rounded-md text-left font-medium text-sm text-gray-700">Edit</button>
