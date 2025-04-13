@@ -723,6 +723,10 @@ video {
   width: 100%;
 }
 
+.min-w-\[200px\] {
+  min-width: 200px;
+}
+
 .min-w-\[298px\] {
   min-width: 298px;
 }
@@ -831,6 +835,10 @@ video {
 
 .whitespace-nowrap {
   white-space: nowrap;
+}
+
+.text-nowrap {
+  text-wrap: nowrap;
 }
 
 .rounded {
@@ -1056,6 +1064,12 @@ video {
   opacity: 0.5;
 }
 
+.shadow-project-actions-menu {
+  --tw-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.08),0px 15px 35px -5px rgba(17, 24, 38, 0.15),0px 0px 0px 1px rgba(152, 161, 179, 0.1);
+  --tw-shadow-colored: 0px 5px 15px 0px var(--tw-shadow-color), 0px 15px 35px -5px var(--tw-shadow-color), 0px 0px 0px 1px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
 .shadow-project-deletion-form {
   --tw-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.2),0px 30px 70px -10px rgba(17, 24, 38, 0.25),0px 0px 0px 1px rgba(152, 161, 178, 0.1);
   --tw-shadow-colored: 0px 10px 30px 0px var(--tw-shadow-color), 0px 30px 70px -10px var(--tw-shadow-color), 0px 0px 0px 1px var(--tw-shadow-color);
@@ -1065,12 +1079,6 @@ video {
 .shadow-project-form {
   --tw-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.2),0px 30px 70px 0px rgba(26, 34, 64, 0.15),0px 0px 0px 1px rgba(136, 143, 170, 0.1);;
   --tw-shadow-colored: 0px 10px 30px 0px var(--tw-shadow-color), 0px 30px 70px 0px var(--tw-shadow-color), 0px 0px 0px 1px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-
-.shadow-project-actions-menu {
-  --tw-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.08),0px 15px 35px -5px rgba(17, 24, 38, 0.15),0px 0px 0px 1px rgba(152, 161, 179, 0.1);
-  --tw-shadow-colored: 0px 5px 15px 0px var(--tw-shadow-color), 0px 15px 35px -5px var(--tw-shadow-color), 0px 0px 0px 1px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 

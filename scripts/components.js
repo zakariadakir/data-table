@@ -2,6 +2,9 @@
 
 // Scripts:
 import {
+  validateProjectName,
+  handleCancelBtn,
+  enableSubmitOnNameValidation,
   removeProjectAndUpdateUI,
   archiveProjectAndUpdateUI,
 } from "./scripts.js";
@@ -73,18 +76,6 @@ const createFormHeader = (formType) => {
   return header;
 };
 
-const validateProjectName = (projectName, currentName = "") => {
-  projectName = projectName.trim();
-  if (!projectName) return "Project name is required.";
-  if (projectName.length < 5)
-    return "Project name must be at least 5 letters long.";
-  if (!/^[a-zA-Z ]+$/.test(projectName))
-    return "Project name must contain only letters and spaces.";
-  if (isDuplicateProjectName(projectName, currentName))
-    return "Project name already exists.";
-  return "";
-};
-
 const createProjectNameField = (formType, project) => {
   const container = document.createElement("div");
   container.className = "flex flex-col gap-2";
@@ -99,7 +90,8 @@ const createProjectNameField = (formType, project) => {
   const inputName = container.querySelector(".input-project-name");
   const errorMsg = container.querySelector(".error-msg");
   inputName.addEventListener("input", () => {
-    errorMsg.textContent = validateProjectName(inputName.value, projectName);
+    const inputNameValue = inputName.value.trim();
+    errorMsg.textContent = validateProjectName(inputNameValue, projectName);
   });
   return container;
 };
@@ -126,13 +118,6 @@ const createFormFooter = (formType) => {
   return footer;
 };
 
-const handleCancelBtn = (cancelBtn, form, overlay) => {
-  cancelBtn.addEventListener("click", () => {
-    form.remove();
-    overlay.remove();
-  });
-};
-
 const createProjectForm = (formType, project = {}) => {
   const form = document.createElement("form");
   form.className =
@@ -144,6 +129,9 @@ const createProjectForm = (formType, project = {}) => {
   const overlay = createOverlay(formType);
   const cancelBtn = form.querySelector(".cancel-btn");
   handleCancelBtn(cancelBtn, form, overlay);
+  const input = form.querySelector(".input-project-name");
+  const submitBtn = form.querySelector(".submit-btn");
+  enableSubmitOnNameValidation(input, submitBtn, project.name);
   document.body.append(overlay, form);
 };
 
@@ -192,7 +180,7 @@ const createProjectNameCell = (project) => {
 
 const createProjectLastUpdatedCell = (project) => {
   const cell = document.createElement("td");
-  cell.classList.add("py-3", "px-2.5");
+  cell.className = "px-2.5 py-3";
   cell.innerHTML = `
   <div class="flex items-center justify-center gap-2">
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -31,6 +31,47 @@ const updateTotalProjectsCount = () => {
   totalProjectsCount.textContent = storedProjectsArr.length;
 };
 
+export const validateProjectName = (projectName, existingProjectName) => {
+  if (!projectName) return "Project name is required.";
+  if (projectName.length < 5)
+    return "Project name must be at least 5 letters long.";
+  if (!/^[a-zA-Z ]+$/.test(projectName))
+    return "Project name must contain only letters and spaces.";
+  if (checkForDuplicateProjectName(projectName, existingProjectName))
+    return "Project name already exists.";
+  return "";
+};
+
+const checkForDuplicateProjectName = (projectName, existingProjectName) =>
+  storedProjectsArr.some(
+    (project) =>
+      project.name === projectName && project.name !== existingProjectName
+  );
+
+export const handleCancelBtn = (cancelBtn, form, overlay) => {
+  cancelBtn.addEventListener("click", () => {
+    form.remove();
+    overlay.remove();
+  });
+};
+
+export const enableSubmitOnNameValidation = (
+  input,
+  submitBtn,
+  originalValue
+) => {
+  input.addEventListener("input", () => {
+    const currentValue = input.value.trim();
+    const isNameInvalid =
+      currentValue.length < 5 || !/^[a-zA-Z ]+$/.test(currentValue);
+    const isDuplicate = checkForDuplicateProjectName(
+      currentValue,
+      originalValue
+    );
+    submitBtn.disabled = isNameInvalid || isDuplicate;
+  });
+};
+
 export const removeProjectAndUpdateUI = (projectId) => {
   storedProjectsArr = storedProjectsArr.filter(
     (project) => project.id !== projectId
