@@ -87,6 +87,27 @@ export const handleAddProjectSubmit = () => {
   refreshUI();
 };
 
+export const handleEditProjectSubmit = (project) => {
+  const projectName = document
+    .querySelector(".input-project-name")
+    .value.trim();
+  const now = new Date();
+  const formattedDate = new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  })
+    .format(now)
+    .replace(/am|pm/i, (match) => match.toUpperCase());
+  project.name = projectName;
+  project.lastUpdated = formattedDate;
+  localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
+  refreshUI();
+};
+
 export const enableSubmitOnNameValidation = (
   input,
   submitBtn,

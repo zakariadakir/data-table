@@ -6,6 +6,7 @@ import {
   handleCancelBtn,
   enableSubmitOnNameValidation,
   handleAddProjectSubmit,
+  handleEditProjectSubmit,
   removeProjectAndUpdateUI,
   archiveProjectAndUpdateUI,
 } from "./scripts.js";
@@ -137,9 +138,11 @@ const createProjectForm = (formType, project = {}) => {
     e.preventDefault();
     if (formType === "add") {
       handleAddProjectSubmit();
-      form.remove();
-      overlay.remove();
+    } else {
+      handleEditProjectSubmit(project);
     }
+    form.remove();
+    overlay.remove();
   });
   document.body.append(overlay, form);
 };
