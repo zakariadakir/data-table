@@ -55,6 +55,38 @@ export const handleCancelBtn = (cancelBtn, form, overlay) => {
   });
 };
 
+export const handleAddProjectSubmit = () => {
+  const projectName = document
+    .querySelector(".input-project-name")
+    .value.trim();
+  const now = new Date();
+  const formattedDate = new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  })
+    .format(now)
+    .replace(/am|pm/i, (match) => match.toUpperCase());
+  const newProject = {
+    isSelected: false,
+    rowIndex: 1,
+    projectId: Date.now(),
+    name: projectName,
+    pm: "Leo Gouse",
+    status: "On Track",
+    lastUpdated: formattedDate,
+  };
+  storedProjectsArr.unshift(newProject);
+  storedProjectsArr.forEach((project, i) => {
+    project.rowIndex = i + 1;
+  });
+  localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
+  refreshUI();
+};
+
 export const enableSubmitOnNameValidation = (
   input,
   submitBtn,
@@ -128,15 +160,12 @@ const renderFilterStatusTabs = () => {
 };
 
 const renderFilteredAndSortedProjects = () => {
-  const filteredProjects = filterProjectsByStatus(activeStatusFilter).filter(
-    (project) =>
+  const filteredProjects = filterProjectsByStatus(activeStatusFilter)
+    .filter((project) =>
       project.name.toLowerCase().includes(activeSearchTerm.toLowerCase())
-  );
-  renderProjects(
-    filteredProjects.sort((a, b) => {
-      return compareValues(a[sortKey], b[sortKey], sortOrder === "asc");
-    })
-  );
+    )
+    .sort((a, b) => compareValues(a[sortKey], b[sortKey], sortOrder === "asc"));
+  renderProjects(filteredProjects);
 };
 
 const renderProjects = (arr) => {

@@ -5,6 +5,7 @@ import {
   validateProjectName,
   handleCancelBtn,
   enableSubmitOnNameValidation,
+  handleAddProjectSubmit,
   removeProjectAndUpdateUI,
   archiveProjectAndUpdateUI,
 } from "./scripts.js";
@@ -132,6 +133,14 @@ const createProjectForm = (formType, project = {}) => {
   const input = form.querySelector(".input-project-name");
   const submitBtn = form.querySelector(".submit-btn");
   enableSubmitOnNameValidation(input, submitBtn, project.name);
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (formType === "add") {
+      handleAddProjectSubmit();
+      form.remove();
+      overlay.remove();
+    }
+  });
   document.body.append(overlay, form);
 };
 
