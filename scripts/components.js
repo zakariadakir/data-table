@@ -162,9 +162,10 @@ export const createProjectRow = (project) => {
     "project-row border-y border-gray-1 transition-all hover:bg-gray-0";
   const rowIndexCell = createRowIndexCell(project);
   const nameCell = createProjectNameCell(project);
+  const managerCell = createProjectManagerCell(project);
   const lastUpdatedCell = createProjectLastUpdatedCell(project);
   const actionsCell = createProjectActionsCell(project);
-  row.append(rowIndexCell, nameCell, lastUpdatedCell, actionsCell);
+  row.append(rowIndexCell, nameCell, managerCell, lastUpdatedCell, actionsCell);
   return row;
 };
 
@@ -188,6 +189,43 @@ const createProjectNameCell = (project) => {
     </svg>
   </a>`;
   return cell;
+};
+
+const createProjectManagerCell = (project) => {
+  const cell = document.createElement("td");
+  cell.className = "py-3 px-2.5 flex items-center justify-center relative";
+  const managerName = project.pm.replace(/\s+/g, "-").toLowerCase();
+  const tooltip = createManagerNameTooltip(project);
+  const showTooltip = () => cell.appendChild(tooltip);
+  const hideTooltip = () => {
+    const tooltipDiv = cell.querySelector("div");
+    if (tooltipDiv) tooltipDiv.remove();
+  };
+  const img = new Image();
+  img.src = `./images/${managerName}.png`;
+  img.alt = project.pm;
+  img.className = "w-6 h-6 rounded-md";
+  img.onerror = () => {
+    const initials = project.pm
+              .split(" ")
+      .map((name) => name[0].toUpperCase())
+      .join("");
+    cell.innerHTML = `<span class="w-6 h-6 rounded-md flex items-center justify-center bg-gray-0 text-indigo-500 font-semibold text-[10px] border border-[#D2D5DC80]">${initials}</span>`;
+    const span = cell.querySelector("span");
+    span.addEventListener("mouseover", showTooltip);
+    span.addEventListener("mouseout", hideTooltip);
+  };
+  img.addEventListener("mouseover", showTooltip);
+  img.addEventListener("mouseout", hideTooltip);
+  cell.appendChild(img);
+  return cell;
+};
+
+const createManagerNameTooltip = (project) => {
+  const container = document.createElement("div");
+  container.className = "manager-tooltip";
+  container.innerHTML = `<h3 class="text-sm text-white font-medium">${project.pm}</h3>`;
+  return container;
 };
 
 const createProjectLastUpdatedCell = (project) => {
@@ -263,3 +301,4 @@ const createProjectActionsMenu = (project, container) => {
   document.addEventListener("click", closeDropdown);
   return menu;
 };
+ 
