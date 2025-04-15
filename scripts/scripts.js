@@ -6,8 +6,8 @@ import { projectStatusesArr, defaultProjectsArr } from "./data.js";
 // Components:
 import {
   showToastNotification,
-  openAddProjectForm,
-  createProjectRow,
+  openAddProjectModal,
+  buildProjectRow,
 } from "./components.js";
 
 // DOM Elements:
@@ -31,36 +31,26 @@ const updateTotalProjectsCount = () => {
   totalProjectsCount.textContent = storedProjectsArr.length;
 };
 
-export const validateProjectName = (projectName, existingProjectName) => {
-  if (!projectName) return "Project name is required.";
-  if (projectName.length < 5)
-    return "Project name must be at least 5 letters long.";
-  if (!/^[a-zA-Z ]+$/.test(projectName))
-    return "Project name must contain only letters and spaces.";
-  if (checkForDuplicateProjectName(projectName, existingProjectName))
-    return "Project name already exists.";
+export const validateProjectName = (name, originalName) => {
+  if (!name) return "Project name is required.";
+  if (name.length < 5) return "Must be at least 5 characters.";
+  if (!/^[a-zA-Z ]+$/.test(name)) return "Only letters and spaces allowed.";
+  if (isDuplicateProjectName(name, originalName)) return "Name already exists.";
   return "";
 };
 
-const checkForDuplicateProjectName = (projectName, existingProjectName) =>
-  storedProjectsArr.some(
-    (project) =>
-      project.name === projectName && project.name !== existingProjectName
-  );
+const isDuplicateProjectName = (name, originalName) =>
+  storedProjectsArr.some((p) => p.name === name && p.name !== originalName);
 
-export const handleCancelBtn = (cancelBtn, form, overlay) => {
-  cancelBtn.addEventListener("click", () => {
+export const handleCancelBtn = (btn, form, overlay) => {
+  btn.addEventListener("click", () => {
     form.remove();
     overlay.remove();
   });
 };
 
-export const handleAddProjectSubmit = () => {
-  const projectName = document
-    .querySelector(".input-project-name")
-    .value.trim();
-  const now = new Date();
-  const formattedDate = new Intl.DateTimeFormat("en-GB", {
+const formatDate = (date) =>
+  new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -68,42 +58,28 @@ export const handleAddProjectSubmit = () => {
     minute: "2-digit",
     hour12: true,
   })
-    .format(now)
-    .replace(/am|pm/i, (match) => match.toUpperCase());
+    .format(date)
+    .replace(/am|pm/i, (m) => m.toUpperCase());
+
+export const addProject = (name) => {
   const newProject = {
     isSelected: false,
     rowIndex: 1,
     projectId: Date.now(),
-    name: projectName,
+    name: name,
     pm: "Leo Gouse",
     status: "On Track",
-    lastUpdated: formattedDate,
+    lastUpdated: formatDate(new Date()),
   };
   storedProjectsArr.unshift(newProject);
-  storedProjectsArr.forEach((project, i) => {
-    project.rowIndex = i + 1;
-  });
+  storedProjectsArr.forEach((p, i) => (p.rowIndex = i + 1));
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
   refreshUI();
 };
 
-export const handleEditProjectSubmit = (project) => {
-  const projectName = document
-    .querySelector(".input-project-name")
-    .value.trim();
-  const now = new Date();
-  const formattedDate = new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  })
-    .format(now)
-    .replace(/am|pm/i, (match) => match.toUpperCase());
-  project.name = projectName;
-  project.lastUpdated = formattedDate;
+export const editProject = (name, project) => {
+  project.name = name;
+  project.lastUpdated = formatDate(new Date());
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
   refreshUI();
 };
@@ -111,30 +87,24 @@ export const handleEditProjectSubmit = (project) => {
 export const enableSubmitOnNameValidation = (
   input,
   submitBtn,
-  originalValue
+  originalName
 ) => {
   input.addEventListener("input", () => {
-    const currentValue = input.value.trim();
-    const isNameInvalid =
-      currentValue.length < 5 || !/^[a-zA-Z ]+$/.test(currentValue);
-    const isDuplicate = checkForDuplicateProjectName(
-      currentValue,
-      originalValue
-    );
-    submitBtn.disabled = isNameInvalid || isDuplicate;
+    const value = input.value.trim();
+    const invalid = value.length < 5 || !/^[a-zA-Z ]+$/.test(value);
+    const duplicate = isDuplicateProjectName(value, originalName);
+    submitBtn.disabled = invalid || duplicate;
   });
 };
 
-export const removeProjectAndUpdateUI = (projectId) => {
-  storedProjectsArr = storedProjectsArr.filter(
-    (project) => project.id !== projectId
-  );
+export const removeProject = (id) => {
+  storedProjectsArr = storedProjectsArr.filter((p) => p.id !== id);
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
   showToastNotification("Project deleted successfully");
   refreshUI();
 };
 
-export const archiveProjectAndUpdateUI = (project) => {
+export const toggleArchiveProject = (project) => {
   project.isArchived = !project.isArchived;
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
   showToastNotification(
@@ -148,19 +118,18 @@ export const archiveProjectAndUpdateUI = (project) => {
 const filterProjectsByStatus = (status) => {
   if (status === "All") return storedProjectsArr;
   if (status === "Archived")
-    return storedProjectsArr.filter((project) => project.isArchived);
-  return storedProjectsArr.filter((project) => project.status === status);
+    return storedProjectsArr.filter((p) => p.isArchived);
+  return storedProjectsArr.filter((p) => p.status === status);
 };
 
 const countProjectsByStatus = (status) => filterProjectsByStatus(status).length;
 
-const handleFilterTabClick = (tabButton, status) => {
-  tabButton.addEventListener("click", () => {
-    const allTabs = document.querySelectorAll(".filter-status-tab");
-    allTabs.forEach((tab) => {
-      tab.setAttribute("data-active", "false");
-    });
-    tabButton.setAttribute("data-active", "true");
+const handleFilterTabClick = (btn, status) => {
+  btn.addEventListener("click", () => {
+    document
+      .querySelectorAll(".filter-status-tab")
+      .forEach((tab) => tab.setAttribute("data-active", "false"));
+    btn.setAttribute("data-active", "true");
     activeStatusFilter = status;
     renderFilteredAndSortedProjects();
   });
@@ -170,23 +139,27 @@ const renderFilterStatusTabs = () => {
   filterStatusTabsWrapper.innerHTML = "";
   projectStatusesArr.forEach((status) => {
     const isActive = status === activeStatusFilter;
-    const listItem = document.createElement("li");
-    listItem.innerHTML = `<button type="button" class="filter-status-tab" data-active="${isActive}">${status}<span>${countProjectsByStatus(
-      status
-    )}</span></button>`;
-    const filterTabButton = listItem.querySelector("button");
-    handleFilterTabClick(filterTabButton, status);
-    filterStatusTabsWrapper.appendChild(listItem);
+    const count = countProjectsByStatus(status);
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <button type="button" class="filter-status-tab" data-active="${isActive}">
+        ${status}<span>${count}</span>
+      </button>
+    `;
+    const btn = li.querySelector("button");
+    handleFilterTabClick(btn, status);
+    filterStatusTabsWrapper.appendChild(li);
   });
 };
 
 const renderFilteredAndSortedProjects = () => {
-  const filteredProjects = filterProjectsByStatus(activeStatusFilter)
-    .filter((project) =>
-      project.name.toLowerCase().includes(activeSearchTerm.toLowerCase())
-    )
-    .sort((a, b) => compareValues(a[sortKey], b[sortKey], sortOrder === "asc"));
-  renderProjects(filteredProjects);
+  const filtered = filterProjectsByStatus(activeStatusFilter).filter((p) =>
+    p.name.toLowerCase().includes(activeSearchTerm.toLowerCase())
+  );
+  const sorted = filtered.sort((a, b) =>
+    compareValues(a[sortKey], b[sortKey], sortOrder === "asc")
+  );
+  renderProjects(sorted);
 };
 
 const renderProjects = (arr) => {
@@ -195,7 +168,7 @@ const renderProjects = (arr) => {
     projectsWrapper.innerHTML = `<tr><td class="text-sm text-gray-900 py-3 px-2.5" colspan="100%">No projects found.</td></tr>`;
   } else {
     arr.forEach((project) => {
-      const row = createProjectRow(project);
+      const row = buildProjectRow(project);
       projectsWrapper.appendChild(row);
     });
   }
@@ -220,29 +193,33 @@ const compareValues = (a, b, ascending) => {
 const sortProjectsByButton = () => {
   sortBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
-      sortBtns.forEach((otherBtn) => {
-        if (otherBtn !== btn) {
-          otherBtn.dataset.clickCount = "0";
-          otherBtn.dataset.active = "false";
-          otherBtn.dataset.order = "none";
+      sortBtns.forEach((b) => {
+        if (b !== btn) {
+          b.dataset.clickCount = "0";
+          b.dataset.active = "false";
+          b.dataset.order = "none";
         }
       });
       let clickCount = parseInt(btn.dataset.clickCount, 10) + 1;
       btn.dataset.clickCount = clickCount.toString();
       sortKey = btn.dataset.sortKey;
-      if (clickCount % 3 === 1) {
-        btn.dataset.active = "true";
-        btn.dataset.order = "asc";
-        sortOrder = "asc";
-      } else if (clickCount % 3 === 2) {
-        btn.dataset.order = "desc";
-        sortOrder = "desc";
-      } else {
-        btn.dataset.clickCount = "0";
-        btn.dataset.active = "false";
-        btn.dataset.order = "none";
-        sortKey = "";
-        sortOrder = "";
+      switch (clickCount % 3) {
+        case 1:
+          btn.dataset.active = "true";
+          btn.dataset.order = "asc";
+          sortOrder = "asc";
+          break;
+        case 2:
+          btn.dataset.order = "desc";
+          sortOrder = "desc";
+          break;
+        default:
+          btn.dataset.clickCount = "0";
+          btn.dataset.active = "false";
+          btn.dataset.order = "none";
+          sortKey = "";
+          sortOrder = "";
+          break;
       }
       renderFilteredAndSortedProjects();
     });
@@ -266,5 +243,5 @@ searchProjectInput.addEventListener("input", (e) => {
 });
 
 addProjectBtn.addEventListener("click", () => {
-  openAddProjectForm();
+  openAddProjectModal();
 });

@@ -60,6 +60,12 @@ module.exports = {
           "0px 5px 15px 0px rgba(0, 0, 0, 0.08),0px 15px 35px -5px rgba(17, 24, 38, 0.15),0px 0px 0px 1px rgba(152, 161, 179, 0.1)",
         "toast-notification":
           "0px 5px 15px 0px rgba(0, 0, 0, 0.25),0px 15px 35px -5px rgba(17, 24, 38, 0.5),0px 0px 0px 0.5px rgba(255, 255, 255, 0.4)",
+        "project-checkbox-default":
+          "0px 0px 0px 1px rgba(70, 79, 96, 0.16), 0px 1px 1px 0px rgba(0, 0, 0, 0.1)",
+        "project-checkbox-hover":
+          "0px 0px 0px 1px rgba(70, 79, 96, 0.32), 0px 1px 1px 0px rgba(0, 0, 0, 0.1)",
+        "project-checkbox-active":
+          "0px 0px 0px 4px rgba(94, 90, 219, 0.4), 0px 0px 0px 1px rgba(70, 79, 96, 0.32), 0px 1px 1px 0px rgba(0, 0, 0, 0.1)",
       },
     },
   },
