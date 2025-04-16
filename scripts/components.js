@@ -1,5 +1,8 @@
 "use strict";
 
+// Data:
+import { projectStatusesArr } from "./data.js";
+
 // Scripts:
 import {
   validateProjectName,
@@ -8,7 +11,8 @@ import {
   addProject,
   editProject,
   removeProject,
-   toggleArchiveProject ,
+  toggleArchiveProject,
+  updateProjectStatus
 } from "./scripts.js";
 
 const createOverlay = (context) => {
@@ -163,6 +167,7 @@ export const buildProjectRow = (project) => {
     buildRowIndexCell(project),
     buildProjectNameCell(project),
     buildProjectManagerCell(project),
+    buildProjectStatusCell(project),
     buildProjectLastUpdatedCell(project),
     buildProjectActionsCell(project)
   );
@@ -228,6 +233,98 @@ const buildManagerTooltip = (project) => {
   return container;
 };
 
+const buildProjectStatusCell = (project) => {
+  const cell = document.createElement("td");
+  const container = document.createElement("div");
+  const statusClass = project.status.replace(/\s+/g, "-").toLowerCase();
+  cell.className = "project-status-cell";
+  container.className = "px-2.5 py-3 flex justify-center relative";
+  container.innerHTML = `
+  <button type="button" 
+    class="status-btn py-0.5 px-2 text-xs font-medium rounded flex gap-1.5 items-center justify-center border-none group ${statusClass}">
+    <span class="${statusClass}-indicator block w-1.5 h-1.5 rounded-sm"></span>
+    ${project.status}
+    <i class="status-dropdown-icon ph-bold ph-caret-down hidden group-hover:block"></i>
+  </button>
+`;
+  cell.appendChild(container);
+  const statusBtn = container.querySelector(".status-btn");
+  statusBtn.addEventListener("click", () => {
+    const existingForm = container.querySelector(".status-update-form");
+    const updateForm = buildProjectStatusUpdateForm(
+      project,
+      container,
+      statusBtn
+    );
+    if (existingForm) {
+      existingForm.remove();
+    } else {
+      container.appendChild(updateForm);
+    }
+  });
+  return cell;
+};
+
+const buildProjectStatusUpdateForm = (project, container) => {
+  const form = document.createElement("form");
+  form.className = "status-update-form";
+  form.innerHTML = `
+    <div class="form-body px-1.5 py-3">
+      <h2 class="font-medium text-sm text-gray-700 ml-2.5 mb-1.5">Update Project Status</h2>
+    </div>
+    <div class="form-actions bg-white px-4 py-3 flex justify-end gap-5 rounded-b-lg">
+      <button type="button" class="cancel-btn text-sm font-medium text-gray-700">Cancel</button>
+      <button type="submit" class="submit-btn text-sm font-medium text-indigo-500 disabled:text-indigo-300" disabled="true">Submit</button>
+    </div>
+  `;
+  const formBody = form.querySelector(".form-body");
+  const cancelBtn = form.querySelector(".cancel-btn");
+  const submitBtn = form.querySelector(".submit-btn");
+  formBody.appendChild(buildStatusOptionsList(project, submitBtn));
+  const closeForm = (event) => {
+    if (!container.contains(event.target)) {
+      form.remove();
+    }
+  };
+  cancelBtn.addEventListener("click", () => form.remove());
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    updateProjectStatus(project);
+    form.remove();
+  });
+  document.addEventListener("click", closeForm);
+  return form;
+};
+
+const buildStatusOptionsList = (project, submitBtn) => {
+  const list = document.createElement("ul");
+  list.className = "status-options-list";
+  projectStatusesArr.slice(1, 5).forEach((status) => {
+    const statusClass = status.replace(/\s+/g, "-").toLowerCase();
+    const inputId = `${statusClass}-${project.id}`;
+    const isCurrent = status === project.status;
+    const listItem = document.createElement("li");
+    listItem.innerHTML = `
+      <label for="${inputId}" class="status-option ${inputId} font-medium text-sm text-gray-700 rounded flex items-baseline cursor-pointer gap-2.5 w-full py-1 px-3 transition-all duration-300 ease-in-out hover:bg-indigo-0 has-[:checked]:bg-indigo-500 has-[:checked]:text-white">
+        <span class="${statusClass}-indicator w-2.5 h-2.5 rounded-sm block"></span>
+        ${status}
+        <input
+          type="radio"
+          class="status-radio hidden"
+          name="project-status"
+          value="${status}"
+          id="${inputId}"
+          ${isCurrent? "checked" : ""}/>
+      </label>
+    `;
+    listItem.querySelector(".status-radio").addEventListener("click", () => {
+      submitBtn.disabled = status === project.status;
+    });
+    list.appendChild(listItem);
+  });
+  return list;
+};
+
 const buildProjectLastUpdatedCell = (project) => {
   const cell = document.createElement("td");
   cell.className = "px-2.5 py-3";
@@ -286,7 +383,7 @@ const buildProjectActionsMenu = (project, container) => {
     });
   };
   addListener(".edit-btn", () => openEditProjectModal(project));
-  addListener(".archive-btn", () =>  toggleArchiveProject (project));
+  addListener(".archive-btn", () => toggleArchiveProject(project));
   addListener(".delete-btn", () => openDeleteProjectModal(project));
   const closeDropdown = (event) => {
     if (!container.contains(event.target)) {

@@ -49,7 +49,7 @@ export const handleCancelBtn = (btn, form, overlay) => {
   });
 };
 
-const formatDate = (date) =>
+export const formatDate = (date) =>
   new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "short",
@@ -113,6 +113,15 @@ export const toggleArchiveProject = (project) => {
       : "Project unarchived successfully"
   );
   refreshUI();
+};
+
+export const updateProjectStatus = (project) => {
+  const selectedStatus = document.querySelector(".status-radio:checked");
+  project.status = selectedStatus.value;
+  project.lastUpdated = formatDate(new Date());
+  localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
+  refreshUI();
+  showToastNotification("Project status updated successfully");
 };
 
 const filterProjectsByStatus = (status) => {
@@ -226,7 +235,7 @@ const sortProjectsByButton = () => {
   });
 };
 
-const refreshUI = () => {
+export const refreshUI = () => {
   updateTotalProjectsCount();
   renderFilterStatusTabs();
   renderFilteredAndSortedProjects();

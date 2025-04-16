@@ -66,6 +66,7 @@ module.exports = {
           "0px 0px 0px 1px rgba(70, 79, 96, 0.32), 0px 1px 1px 0px rgba(0, 0, 0, 0.1)",
         "project-checkbox-active":
           "0px 0px 0px 4px rgba(94, 90, 219, 0.4), 0px 0px 0px 1px rgba(70, 79, 96, 0.32), 0px 1px 1px 0px rgba(0, 0, 0, 0.1)",
+        "status-update-form": "0 4px 20px rgba(0, 0, 0, 0.1)",
       },
     },
   },
