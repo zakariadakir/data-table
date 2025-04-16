@@ -19,6 +19,7 @@ export const defaultProjectsArr = [
     isArchived: false,
     status: "On Track",
     lastUpdated: "15 Mar 2021, 12:47 PM",
+    resources: ["UX/UI Design", "Frontend", "Backend", "Full Stack"],
   },
   {
     isSelected: false,
@@ -29,6 +30,7 @@ export const defaultProjectsArr = [
     isArchived: false,
     status: "On Track",
     lastUpdated: "15 Mar 2021, 12:48 PM",
+    resources: ["UX/UI Design"],
   },
   {
     isSelected: false,
@@ -39,6 +41,7 @@ export const defaultProjectsArr = [
     isArchived: false,
     status: "On Track",
     lastUpdated: "15 Mar 2021, 12:46 PM",
+    resources: ["UX/UI Design", "Frontend", "Full Stack"],
   },
   {
     isSelected: false,
@@ -49,6 +52,7 @@ export const defaultProjectsArr = [
     isArchived: true,
     status: "On Hold",
     lastUpdated: "15 Mar 2023, 12:47 PM",
+    resources: ["UX/UI Design", "Frontend", "Backend", "Full Stack"],
   },
   {
     isSelected: false,
@@ -59,5 +63,6 @@ export const defaultProjectsArr = [
     isArchived: false,
     status: "On Hold",
     lastUpdated: "15 Mar 2021, 12:47 PM",
+    resources: ["UX/UI Design", "Frontend", "Backend", "Full Stack"],
   },
 ];

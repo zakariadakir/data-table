@@ -87,7 +87,7 @@
 
 /* PM */
 .manager-tooltip {
-  @apply bg-gray-900 absolute text-center w-max py-3 px-4 rounded-lg z-10 left-1/2 -translate-x-1/2 before:content-[''] before:absolute before:border-[10px] before:left-1/2 before:-translate-x-1/2  before:border-transparent before:border-b-gray-900 top-full before:top-[-7px] before:border-x-[10px] before:border-b-[10px] before:border-t-[0px];
+  @apply bg-gray-900 absolute text-center w-max py-3 px-4 rounded-lg z-10 left-1/2 -translate-x-1/2 before:content-[''] before:absolute before:border-[10px] before:left-1/2 before:-translate-x-1/2 before:border-transparent before:border-b-gray-900 top-full before:top-[-7px] before:border-x-[10px] before:border-b-[10px] before:border-t-[0px];
 }
 
 /* Status */
@@ -116,7 +116,12 @@
   @apply bg-red-500;
 }
 .status-update-form {
-  @apply absolute z-10 w-full max-w-[272px] rounded-lg bg-gray-0 before:content-[''] before:absolute before:border-[10px] before:left-1/2 before:-translate-x-1/2 before:border-x-[10px] before:border-b-[10px] before:border-t-[0px] before:border-transparent top-full before:top-[-10px] before:border-b-gray-0 shadow-status-update-form;
+  @apply absolute z-10 w-full max-w-[272px] rounded-lg bg-gray-0 before:content-[''] before:absolute before:border-[10px] before:left-1/2 before:-translate-x-1/2 before:border-x-[10px] before:border-b-[10px] before:border-t-0 before:border-transparent top-full before:top-[-10px] before:border-b-gray-0 shadow-status-update-form;
+}
+
+/* Resource */
+.resource-tooltip {
+  @apply bg-gray-900 absolute w-max py-3 px-4 rounded-lg z-10 left-1/2 -translate-x-1/2 before:content-[''] before:absolute before:border-[10px] before:left-1/2 before:-translate-x-1/2 before:border-x-[10px] before:border-b-[10px] before:border-t-0 before:border-transparent before:border-b-gray-900 top-full before:top-[-10px];
 }
 
 /* Actions Cell */

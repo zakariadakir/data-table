@@ -197,6 +197,9 @@ const compareValues = (a, b, ascending) => {
     }
     return ascending ? a.localeCompare(b) : b.localeCompare(a);
   }
+  if (Array.isArray(a) && Array.isArray(b)) {
+    return ascending ? a.length - b.length : b.length - a.length;
+  }
 };
 
 const sortProjectsByButton = () => {

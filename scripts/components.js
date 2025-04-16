@@ -12,7 +12,7 @@ import {
   editProject,
   removeProject,
   toggleArchiveProject,
-  updateProjectStatus
+  updateProjectStatus,
 } from "./scripts.js";
 
 const createOverlay = (context) => {
@@ -169,6 +169,7 @@ export const buildProjectRow = (project) => {
     buildProjectManagerCell(project),
     buildProjectStatusCell(project),
     buildProjectLastUpdatedCell(project),
+    buildProjectResourcesCell(project),
     buildProjectActionsCell(project)
   );
   return row;
@@ -314,7 +315,7 @@ const buildStatusOptionsList = (project, submitBtn) => {
           name="project-status"
           value="${status}"
           id="${inputId}"
-          ${isCurrent? "checked" : ""}/>
+          ${isCurrent ? "checked" : ""}/>
       </label>
     `;
     listItem.querySelector(".status-radio").addEventListener("click", () => {
@@ -339,6 +340,40 @@ const buildProjectLastUpdatedCell = (project) => {
   </div>
   `;
   return cell;
+};
+
+const buildProjectResourcesCell = (project) => {
+  const cell = document.createElement("td");
+  cell.className = "py-3 px-2.5 text-center relative";
+  cell.innerHTML = `<span class="text-sm text-gray-900 text-center rounded-md bg-indigo-0 px-[7px] py-1">${project.resources.length}</span>`;
+  const span = cell.querySelector("span");
+  const tooltip = buildResourcesTooltip(project);
+  const showTooltip = () => cell.appendChild(tooltip);
+  const hideTooltip = () => {
+    const tip = cell.querySelector(".resource-tooltip");
+    if (tip) tip.remove();
+  };
+  span.addEventListener("mouseover", showTooltip);
+  span.addEventListener("mouseout", hideTooltip);
+  return cell;
+};
+
+const buildResourcesTooltip = (project) => {
+  const container = document.createElement("div");
+  container.className = "resource-tooltip";
+  const list = document.createElement("ul");
+  list.className = "flex flex-col gap-3 mt-3";
+  project.resources.forEach((resource) => {
+    const listItem = document.createElement("li");
+    listItem.className = "text-sm text-white text-left font-medium";
+    listItem.textContent = resource;
+    list.appendChild(listItem);
+  });
+  container.innerHTML = `
+  <h2 class="text-xs text-indigo-200 font-medium uppercase text-left">Resources</h2>
+  `;
+  container.appendChild(list);
+  return container;
 };
 
 const buildProjectActionsCell = (project) => {
