@@ -33,8 +33,8 @@ const updateTotalProjectsCount = () => {
 
 export const validateProjectName = (name, originalName) => {
   if (!name) return "Project name is required.";
-  if (name.length < 5) return "Must be at least 5 characters.";
   if (!/^[a-zA-Z ]+$/.test(name)) return "Only letters and spaces allowed.";
+  if (name.length < 5) return "Must be at least 5 characters.";
   if (isDuplicateProjectName(name, originalName)) return "Name already exists.";
   return "";
 };
