@@ -66,3 +66,9 @@ export const defaultProjectsArr = [
     resources: ["UX/UI Design", "Frontend", "Backend", "Full Stack"],
   },
 ];
+
+export const projectManagersArr = [
+  "Roger Vaccaro",
+  "Tatiana Dias",
+  "Leo Gouse",
+];

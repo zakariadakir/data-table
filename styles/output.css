@@ -759,6 +759,10 @@ video {
   width: 100%;
 }
 
+.min-w-\[100px\] {
+  min-width: 100px;
+}
+
 .min-w-\[200px\] {
   min-width: 200px;
 }
@@ -781,10 +785,6 @@ video {
 
 .min-w-\[54px\] {
   min-width: 54px;
-}
-
-.min-w-\[100px\] {
-  min-width: 100px;
 }
 
 .max-w-\[90\%\] {
@@ -879,6 +879,10 @@ video {
 
 .gap-8 {
   gap: 2rem;
+}
+
+.gap-1 {
+  gap: 0.25rem;
 }
 
 .overflow-hidden {
@@ -1131,6 +1135,10 @@ video {
   line-height: 1.25rem;
 }
 
+.tracking-\[0\.28px\] {
+  letter-spacing: 0.28px;
+}
+
 .text-gray-400 {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity, 1));
@@ -1203,6 +1211,14 @@ video {
 
 .transition-all {
   transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
@@ -1716,6 +1732,11 @@ video {
   color: rgb(79 70 229 / var(--tw-text-opacity, 1));
 }
 
+.hover\:text-indigo-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(99 102 241 / var(--tw-text-opacity, 1));
+}
+
 .hover\:underline:hover {
   text-decoration-line: underline;
 }
@@ -1727,6 +1748,20 @@ video {
 
 .group:hover .group-hover\:block {
   display: block;
+}
+
+.peer:checked ~ .peer-checked\:rounded {
+  border-radius: 0.25rem;
+}
+
+.peer:checked ~ .peer-checked\:bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+}
+
+.peer:checked ~ .peer-checked\:text-indigo-500 {
+  --tw-text-opacity: 1;
+  color: rgb(99 102 241 / var(--tw-text-opacity, 1));
 }
 
 .has-\[\:checked\]\:bg-indigo-500:has(:checked) {
@@ -1755,7 +1790,16 @@ video {
 }
 
 @media (min-width: 537px) {
+  .min-\[537px\]\:w-fit {
+    width: -moz-fit-content;
+    width: fit-content;
+  }
+
   .min-\[537px\]\:max-w-\[440px\] {
     max-width: 440px;
+  }
+
+  .min-\[537px\]\:flex-row {
+    flex-direction: row;
   }
 }

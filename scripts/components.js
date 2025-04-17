@@ -1,7 +1,7 @@
 "use strict";
 
 // Data:
-import { projectStatusesArr } from "./data.js";
+import { projectStatusesArr, projectManagersArr } from "./data.js";
 
 // Scripts:
 import {
@@ -69,11 +69,46 @@ const buildProjectNameField = (formType, project) => {
   return container;
 };
 
+const buildProjectManagerRadioGroup = (formType, project) => {
+  const container = document.createElement("div");
+  container.className = "flex flex-col gap-2";
+  const label = document.createElement("label");
+  label.className = "text-sm font-medium leading-5 text-gray-700";
+  label.textContent = "Project Manager (PM)";
+  container.appendChild(label);
+  const radioGroup = document.createElement("ul");
+  radioGroup.className =
+    "flex flex-col min-[537px]:flex-row min-[537px]:w-fit gap-1 rounded-md bg-gray-1 p-1";
+  projectManagersArr.forEach((pm) => {
+    const item = document.createElement("li");
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = "projectManager";
+    input.id = pm;
+    input.value = pm;
+    input.className = "hidden peer";
+    input.checked =
+      formType === "add" ? pm === "Roger Vaccaro" : project.pm === pm;
+    const label = document.createElement("label");
+    label.htmlFor = pm;
+    label.textContent = pm;
+    label.className =
+      "cursor-pointer block text-gray-700 text-sm font-medium tracking-[0.28px] py-1 px-2.5 transition duration-300 hover:text-indigo-500 peer-checked:bg-white peer-checked:rounded peer-checked:pm-radio-checked peer-checked:text-indigo-500";
+    item.appendChild(input);
+    item.appendChild(label);
+    radioGroup.appendChild(item);
+  });
+  container.appendChild(radioGroup);
+  return container;
+};
+
 const buildModalBody = (formType, project) => {
   const body = document.createElement("div");
   body.className = "flex flex-col gap-8 px-5 py-4 bg-gray-0";
-  const nameField = buildProjectNameField(formType, project);
-  body.appendChild(nameField);
+  body.append(
+    buildProjectNameField(formType, project),
+    buildProjectManagerRadioGroup(formType, project)
+  );
   return body;
 };
 
@@ -98,24 +133,27 @@ const buildModalForm = (formType, project = {}) => {
   const body = buildModalBody(formType, project);
   const footer = buildModalFooter(formType);
   form.append(header, body, footer);
-  const name = form.querySelector(".input-project-name").value.trim();
   const overlay = createOverlay(formType);
+  document.body.append(overlay, form);
+  const nameInput = form.querySelector(".input-project-name");
   const cancelBtn = form.querySelector(".cancel-btn");
-  handleCancelBtn(cancelBtn, form, overlay);
-  const input = form.querySelector(".input-project-name");
   const submitBtn = form.querySelector(".submit-btn");
-  enableSubmitOnNameValidation(input, submitBtn, project.name);
+  enableSubmitOnNameValidation(nameInput, submitBtn, project.name);
+  handleCancelBtn(cancelBtn, form, overlay);
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+    const projectName = nameInput.value.trim();
+    const selectedPm = form.querySelector(
+      'input[name="projectManager"]:checked'
+    ).value;
     if (formType === "add") {
-      addProject(name);
+      addProject(projectName, selectedPm);
     } else {
-      editProject(name, project);
+      editProject(project, projectName, selectedPm);
     }
     form.remove();
     overlay.remove();
   });
-  document.body.append(overlay, form);
 };
 
 export const openAddProjectModal = () => {
@@ -169,7 +207,7 @@ export const buildProjectRow = (project) => {
     buildProjectManagerCell(project),
     buildProjectStatusCell(project),
     buildProjectLastUpdatedCell(project),
-    buildProjectResourcesCell(project),
+    // buildProjectResourcesCell(project),
     buildProjectActionsCell(project)
   );
   return row;

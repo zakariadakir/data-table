@@ -61,13 +61,13 @@ export const formatDate = (date) =>
     .format(date)
     .replace(/am|pm/i, (m) => m.toUpperCase());
 
-export const addProject = (name) => {
+export const addProject = (name, manager) => {
   const newProject = {
     isSelected: false,
     rowIndex: 1,
     projectId: Date.now(),
     name: name,
-    pm: "Leo Gouse",
+    pm: manager,
     status: "On Track",
     lastUpdated: formatDate(new Date()),
   };
@@ -77,8 +77,9 @@ export const addProject = (name) => {
   refreshUI();
 };
 
-export const editProject = (name, project) => {
+export const editProject = (project, name, manager) => {
   project.name = name;
+  project.pm = manager;
   project.lastUpdated = formatDate(new Date());
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
   refreshUI();
