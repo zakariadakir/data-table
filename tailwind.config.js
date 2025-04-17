@@ -67,6 +67,18 @@ module.exports = {
         "project-checkbox-active":
           "0px 0px 0px 4px rgba(94, 90, 219, 0.4), 0px 0px 0px 1px rgba(70, 79, 96, 0.32), 0px 1px 1px 0px rgba(0, 0, 0, 0.1)",
         "status-update-form": "0 4px 20px rgba(0, 0, 0, 0.1)",
+        "resource-checkbox-default":
+          "0px 0px 0px 1px rgba(70, 79, 96, 0.1), 0px 1px 1px 0px rgba(0, 0, 0, 0.1)",
+        "resource-checkbox-checked":
+          "0px 0px 0px 1px rgb(94, 90, 219), 0px 1px 1px 0px rgba(0, 0, 0, 0.1)",
+        "resource-checkbox-checked-hover":
+          "0px 0px 0px 1px rgb(73, 69, 196), 0px 1px 1px 0px rgba(0, 0, 0, 0.1)",
+        "resource-checkbox-checked-active":
+          "0px 0px 0px 4px rgba(94, 90, 219, 0.4), 0px 0px 0px 1px rgb(94, 90, 219), 0px 1px 1px 0px rgba(0, 0, 0, 0.1)",
+        "resource-checkbox-hover":
+          "0px 0px 0px 1px rgba(70, 79, 96, 0.16), 0px 1px 1px 0px rgba(0, 0, 0, 0.1)",
+        "resource-checkbox-active":
+          "0px 0px 0px 1px rgba(70, 79, 96, 0.32), 0px 1px 1px 0px rgba(0, 0, 0, 0.1)",
       },
     },
   },

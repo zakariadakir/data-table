@@ -61,15 +61,17 @@ export const formatDate = (date) =>
     .format(date)
     .replace(/am|pm/i, (m) => m.toUpperCase());
 
-export const addProject = (name, manager) => {
+export const addProject = (name, manager,resources) => {
   const newProject = {
     isSelected: false,
     rowIndex: 1,
     projectId: Date.now(),
     name: name,
     pm: manager,
+    isArchived: false,
     status: "On Track",
     lastUpdated: formatDate(new Date()),
+    resources: resources,
   };
   storedProjectsArr.unshift(newProject);
   storedProjectsArr.forEach((p, i) => (p.rowIndex = i + 1));
@@ -77,10 +79,11 @@ export const addProject = (name, manager) => {
   refreshUI();
 };
 
-export const editProject = (project, name, manager) => {
+export const editProject = (project, name, manager,resources) => {
   project.name = name;
   project.pm = manager;
   project.lastUpdated = formatDate(new Date());
+  project.resources = resources;
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
   refreshUI();
 };

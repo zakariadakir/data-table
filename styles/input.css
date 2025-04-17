@@ -123,6 +123,9 @@
 .resource-tooltip {
   @apply bg-gray-900 absolute w-max py-3 px-4 rounded-lg z-10 left-1/2 -translate-x-1/2 before:content-[''] before:absolute before:border-[10px] before:left-1/2 before:-translate-x-1/2 before:border-x-[10px] before:border-b-[10px] before:border-t-0 before:border-transparent before:border-b-gray-900 top-full before:top-[-10px];
 }
+.resource-checkbox {
+  @apply cursor-pointer transition duration-300 py-0.5 px-2 tracking-[0.36px] text-xs font-medium rounded text-gray-700 bg-white shadow-resource-checkbox-default hover:text-gray-900 hover:shadow-resource-checkbox-hover active:shadow-resource-checkbox-active peer-checked:text-white peer-checked:bg-indigo-500 peer-checked:shadow-resource-checkbox-checked peer-checked:hover:bg-indigo-600 peer-checked:hover:shadow-resource-checkbox-hover;
+}
 
 /* Actions Cell */
 .project-row:has(.project-actions-menu) {

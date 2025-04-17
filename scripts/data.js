@@ -72,3 +72,13 @@ export const projectManagersArr = [
   "Tatiana Dias",
   "Leo Gouse",
 ];
+
+export const projectResourcesArr = [
+  "UX/UI Design",
+  "Frontend",
+  "Backend",
+  "Full Stack",
+  "Graphic Designer",
+  "Web Designer",
+  "QA",
+];

@@ -1,7 +1,11 @@
 "use strict";
 
 // Data:
-import { projectStatusesArr, projectManagersArr } from "./data.js";
+import {
+  projectStatusesArr,
+  projectManagersArr,
+  projectResourcesArr,
+} from "./data.js";
 
 // Scripts:
 import {
@@ -102,12 +106,43 @@ const buildProjectManagerRadioGroup = (formType, project) => {
   return container;
 };
 
+const buildResourceCheckboxGroup = (formType, project) => {
+  const container = document.createElement("div");
+  container.className = "flex flex-col gap-2";
+  const label = document.createElement("label");
+  label.className =
+    "text-sm font-medium leading-5 text-gray-700 cursor-pointer";
+  label.textContent = "Resources";
+  container.appendChild(label);
+  const checkboxList = document.createElement("ul");
+  checkboxList.className = "flex items-center gap-2.5 flex-wrap";
+  projectResourcesArr.forEach((resource) => {
+    const listItem = document.createElement("li");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.name = "resource";
+    input.value = resource;
+    input.id = resource;
+    input.className = "hidden peer";
+    input.checked = formType === "edit" && project.resources.includes(resource);
+    const inputLabel = document.createElement("label");
+    inputLabel.htmlFor = resource;
+    inputLabel.textContent = resource;
+    inputLabel.className = "resource-checkbox";
+    listItem.append(input, inputLabel);
+    checkboxList.appendChild(listItem);
+  });
+  container.appendChild(checkboxList);
+  return container;
+};
+
 const buildModalBody = (formType, project) => {
   const body = document.createElement("div");
   body.className = "flex flex-col gap-8 px-5 py-4 bg-gray-0";
   body.append(
     buildProjectNameField(formType, project),
-    buildProjectManagerRadioGroup(formType, project)
+    buildProjectManagerRadioGroup(formType, project),
+    buildResourceCheckboxGroup(formType, project)
   );
   return body;
 };
@@ -146,10 +181,13 @@ const buildModalForm = (formType, project = {}) => {
     const selectedPm = form.querySelector(
       'input[name="projectManager"]:checked'
     ).value;
+    const selectedResources = Array.from(
+      form.querySelectorAll('input[name="resource"]:checked')
+    ).map((checkbox) => checkbox.value);
     if (formType === "add") {
-      addProject(projectName, selectedPm);
+      addProject(projectName, selectedPm,selectedResources);
     } else {
-      editProject(project, projectName, selectedPm);
+      editProject(project, projectName, selectedPm,selectedResources);
     }
     form.remove();
     overlay.remove();
@@ -207,7 +245,7 @@ export const buildProjectRow = (project) => {
     buildProjectManagerCell(project),
     buildProjectStatusCell(project),
     buildProjectLastUpdatedCell(project),
-    // buildProjectResourcesCell(project),
+    buildProjectResourcesCell(project),
     buildProjectActionsCell(project)
   );
   return row;
