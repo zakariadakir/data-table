@@ -61,7 +61,7 @@ export const formatDate = (date) =>
     .format(date)
     .replace(/am|pm/i, (m) => m.toUpperCase());
 
-export const addProject = (name, manager,resources) => {
+export const addProject = (name, manager, resources) => {
   const newProject = {
     isSelected: false,
     rowIndex: 1,
@@ -79,7 +79,7 @@ export const addProject = (name, manager,resources) => {
   refreshUI();
 };
 
-export const editProject = (project, name, manager,resources) => {
+export const editProject = (project, name, manager, resources) => {
   project.name = name;
   project.pm = manager;
   project.lastUpdated = formatDate(new Date());
@@ -94,11 +94,27 @@ export const enableSubmitOnNameValidation = (
   originalName
 ) => {
   input.addEventListener("input", () => {
-    const value = input.value.trim();
-    const invalid = value.length < 5 || !/^[a-zA-Z ]+$/.test(value);
-    const duplicate = isDuplicateProjectName(value, originalName);
-    submitBtn.disabled = invalid || duplicate;
+    const trimmedValue = input.value.trim();
+    const isTooShort = trimmedValue.length < 5;
+    const isInvalidFormat = !/^[a-zA-Z ]+$/.test(trimmedValue);
+    const isDuplicate = isDuplicateProjectName(trimmedValue, originalName);
+    const isSameAsOriginal = trimmedValue === originalName;
+    const shouldDisable =
+      isTooShort || isInvalidFormat || isDuplicate || isSameAsOriginal;
+    submitBtn.disabled = shouldDisable;
   });
+};
+
+export const enableSubmitOnManagerValidation = (project, submitBtn) => {
+  const pmInputs = document.querySelectorAll('input[name="projectManager"]');
+  const handleChange = () => {
+    const selectedInput = document.querySelector(
+      'input[name="projectManager"]:checked'
+    );
+    const selectedPm = selectedInput.value;
+    submitBtn.disabled = selectedPm === project.pm;
+  };
+  pmInputs.forEach((input) => input.addEventListener("change", handleChange));
 };
 
 export const removeProject = (id) => {

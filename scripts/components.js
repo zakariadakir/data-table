@@ -12,6 +12,7 @@ import {
   validateProjectName,
   handleCancelBtn,
   enableSubmitOnNameValidation,
+  enableSubmitOnManagerValidation,
   addProject,
   editProject,
   removeProject,
@@ -154,8 +155,7 @@ const buildModalFooter = (formType) => {
   const btnText = formType === "add" ? "Add project" : "Save changes";
   footer.innerHTML = `
     <button type="button" class="btn secondary-btn cancel-btn">Cancel</button>
-    <button type="submit" ${formType === "edit" ? "" : "disabled"}
-      class="btn primary-btn submit-btn">${btnText}</button>
+    <button type="submit" disabled class="btn primary-btn submit-btn">${btnText}</button>
   `;
   return footer;
 };
@@ -173,8 +173,11 @@ const buildModalForm = (formType, project = {}) => {
   const nameInput = form.querySelector(".input-project-name");
   const cancelBtn = form.querySelector(".cancel-btn");
   const submitBtn = form.querySelector(".submit-btn");
-  enableSubmitOnNameValidation(nameInput, submitBtn, project.name);
   handleCancelBtn(cancelBtn, form, overlay);
+  enableSubmitOnNameValidation(nameInput, submitBtn, project.name);
+  if (formType === "edit") {
+    enableSubmitOnManagerValidation(project, submitBtn);
+  }
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const projectName = nameInput.value.trim();
@@ -185,9 +188,9 @@ const buildModalForm = (formType, project = {}) => {
       form.querySelectorAll('input[name="resource"]:checked')
     ).map((checkbox) => checkbox.value);
     if (formType === "add") {
-      addProject(projectName, selectedPm,selectedResources);
+      addProject(projectName, selectedPm, selectedResources);
     } else {
-      editProject(project, projectName, selectedPm,selectedResources);
+      editProject(project, projectName, selectedPm, selectedResources);
     }
     form.remove();
     overlay.remove();
