@@ -13,6 +13,7 @@ import {
   handleCancelBtn,
   enableSubmitOnNameValidation,
   enableSubmitOnManagerValidation,
+  enableSubmitOnResourcesValidation,
   addProject,
   editProject,
   removeProject,
@@ -177,6 +178,7 @@ const buildModalForm = (formType, project = {}) => {
   enableSubmitOnNameValidation(nameInput, submitBtn, project.name);
   if (formType === "edit") {
     enableSubmitOnManagerValidation(project, submitBtn);
+    enableSubmitOnResourcesValidation(project, submitBtn);
   }
   form.addEventListener("submit", (e) => {
     e.preventDefault();

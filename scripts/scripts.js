@@ -117,6 +117,21 @@ export const enableSubmitOnManagerValidation = (project, submitBtn) => {
   pmInputs.forEach((input) => input.addEventListener("change", handleChange));
 };
 
+export const enableSubmitOnResourcesValidation = (project, submitBtn) => {
+  const resourceInputs = document.querySelectorAll('input[name="resource"]');
+  const handleChange = () => {
+    const selectedInputs = Array.from(
+      document.querySelectorAll('input[name="resource"]:checked')
+    ).map((checkbox) => checkbox.value);
+    submitBtn.disabled =
+      JSON.stringify(selectedInputs.sort()) ===
+      JSON.stringify(project.resources.sort());
+  };
+  resourceInputs.forEach((input) =>
+    input.addEventListener("change", handleChange)
+  );
+};
+
 export const removeProject = (id) => {
   storedProjectsArr = storedProjectsArr.filter((p) => p.id !== id);
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
