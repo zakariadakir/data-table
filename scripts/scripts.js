@@ -35,10 +35,6 @@ let rowsPerPage = JSON.parse(localStorage.getItem("rowsPerPage")) || 10;
 rowsPerPageSelect.value = rowsPerPage;
 
 // Functions:
-const updateTotalProjectsCount = () => {
-  totalProjectsCount.textContent = storedProjectsArr.length;
-};
-
 export const validateProjectName = (name, originalName) => {
   if (!name) return "Project name is required.";
   if (!/^[a-zA-Z ]+$/.test(name)) return "Only letters and spaces allowed.";
@@ -46,9 +42,6 @@ export const validateProjectName = (name, originalName) => {
   if (isDuplicateProjectName(name, originalName)) return "Name already exists.";
   return "";
 };
-
-const isDuplicateProjectName = (name, originalName) =>
-  storedProjectsArr.some((p) => p.name === name && p.name !== originalName);
 
 export const handleCancelBtn = (btn, form, overlay) => {
   btn.addEventListener("click", () => {
@@ -69,7 +62,7 @@ export const formatDate = (date) =>
     .format(date)
     .replace(/am|pm/i, (m) => m.toUpperCase());
 
-export const addProject = (name, manager, resources) => {
+export const addProject = (name, manager, resources, estimation) => {
   const newProject = {
     isSelected: false,
     rowIndex: 1,
@@ -80,6 +73,7 @@ export const addProject = (name, manager, resources) => {
     status: "On Track",
     lastUpdated: formatDate(new Date()),
     resources: resources,
+    estimation: estimation,
   };
   storedProjectsArr.unshift(newProject);
   storedProjectsArr.forEach((p, i) => (p.rowIndex = i + 1));
@@ -89,11 +83,12 @@ export const addProject = (name, manager, resources) => {
   refreshUI();
 };
 
-export const editProject = (project, name, manager, resources) => {
+export const editProject = (project, name, manager, resources, estimation) => {
   project.name = name;
   project.pm = manager;
   project.lastUpdated = formatDate(new Date());
   project.resources = resources;
+  project.estimation = estimation;
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
   showToastNotification("Project updated successfully.");
   refreshUI();
@@ -143,6 +138,13 @@ export const enableSubmitOnResourcesValidation = (project, submitBtn) => {
   );
 };
 
+export const enableSubmitOnEstimationValidation = (project, submitBtn) => {
+  const estimationInput = document.getElementById("projectEstimation");
+  estimationInput.addEventListener("input", () => {
+    submitBtn.disabled = estimationInput.value === project.estimation;
+  });
+};
+
 export const removeProject = (id) => {
   storedProjectsArr = storedProjectsArr.filter((p) => p.id !== id);
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
@@ -169,6 +171,33 @@ export const updateProjectStatus = (project) => {
   refreshUI();
   showToastNotification("Project status updated successfully");
 };
+
+export const formatEstimationForDisplay = (estimationValue) => {
+  if (estimationValue >= 1_000_000_000_000) {
+    return `US$ ${(estimationValue / 1_000_000_000_000).toFixed(1)}t`;
+  } else if (estimationValue >= 1_000_000_000) {
+    return `US$ ${(estimationValue / 1_000_000_000).toFixed(1)}b`;
+  } else if (estimationValue >= 1_000_000) {
+    return `US$ ${(estimationValue / 1_000_000).toFixed(1)}m`;
+  } else if (estimationValue >= 1_000) {
+    return `US$ ${(estimationValue / 1_000).toFixed(1)}k`;
+  }
+  return `US$ ${estimationValue}`;
+};
+
+export const refreshUI = () => {
+  updateTotalProjectsCount();
+  renderFilterStatusTabs();
+  renderFilteredAndSortedProjects();
+};
+
+const updateTotalProjectsCount = () => {
+  totalProjectsCount.textContent = storedProjectsArr.length;
+};
+
+const isDuplicateProjectName = (name, originalName) =>
+  storedProjectsArr.some((p) => p.name === name && p.name !== originalName);
+
 
 const filterProjectsByStatus = (status) => {
   if (status === "All") return storedProjectsArr;
@@ -315,12 +344,6 @@ const updatePaginationInfo = (currentPage, rowsPerPage, totalProjects) => {
 
 const goToPage = (newPage) => {
   currentPage = newPage;
-  renderFilteredAndSortedProjects();
-};
-
-export const refreshUI = () => {
-  updateTotalProjectsCount();
-  renderFilterStatusTabs();
   renderFilteredAndSortedProjects();
 };
 

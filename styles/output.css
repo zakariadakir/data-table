@@ -636,6 +636,10 @@ video {
   left: 50%;
 }
 
+.left-3 {
+  left: 0.75rem;
+}
+
 .right-0 {
   right: 0px;
 }
@@ -645,6 +649,10 @@ video {
 }
 
 .top-1\/2 {
+  top: 50%;
+}
+
+.top-2\/4 {
   top: 50%;
 }
 
@@ -787,20 +795,12 @@ video {
   min-width: 54px;
 }
 
-.min-w-\[140px\] {
-  min-width: 140px;
-}
-
 .max-w-\[90\%\] {
   max-width: 90%;
 }
 
 .max-w-\[calc\(100\%-32px\)\] {
   max-width: calc(100% - 32px);
-}
-
-.shrink-0 {
-  flex-shrink: 0;
 }
 
 .table-auto {
@@ -817,6 +817,11 @@ video {
 }
 
 .-translate-y-1\/2 {
+  --tw-translate-y: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.-translate-y-2\/4 {
   --tw-translate-y: -50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
@@ -1137,10 +1142,6 @@ video {
 
 .font-semibold {
   font-weight: 600;
-}
-
-.font-normal {
-  font-weight: 400;
 }
 
 .uppercase {
@@ -1788,6 +1789,16 @@ video {
 .project-row:has(.project-actions-menu) .menu-toggle-btn,
 .project-row:hover .menu-toggle-btn {
   display: block;
+}
+
+.placeholder\:text-gray-300::-moz-placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
+}
+
+.placeholder\:text-gray-300::placeholder {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
 }
 
 .hover\:bg-gray-0:hover {

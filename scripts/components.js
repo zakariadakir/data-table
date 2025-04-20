@@ -14,6 +14,8 @@ import {
   enableSubmitOnNameValidation,
   enableSubmitOnManagerValidation,
   enableSubmitOnResourcesValidation,
+  enableSubmitOnEstimationValidation,
+  formatEstimationForDisplay,
   addProject,
   editProject,
   removeProject,
@@ -63,10 +65,10 @@ const buildProjectNameField = (formType, project) => {
     <label for="projectName" class="text-sm font-medium leading-5 text-gray-700 cursor-pointer">
       Project name <span class="text-indigo-500">*</span>
     </label>
-    <input type="text" id="projectName" class="primary-input input-project-name" value="${defaultName}">
+    <input type="text" id="projectName" class="primary-input" value="${defaultName}">
     <p class="text-red-500 text-xs error-msg"></p>
   `;
-  const inputName = container.querySelector(".input-project-name");
+  const inputName = container.querySelector("#projectName");
   const errorMsg = container.querySelector(".error-msg");
   inputName.addEventListener("input", () => {
     const currentName = inputName.value.trim();
@@ -108,7 +110,7 @@ const buildProjectManagerRadioGroup = (formType, project) => {
   return container;
 };
 
-const buildResourceCheckboxGroup = (formType, project) => {
+const buildProjectResourceCheckboxGroup = (formType, project) => {
   const container = document.createElement("div");
   container.className = "flex flex-col gap-2";
   const label = document.createElement("label");
@@ -138,13 +140,28 @@ const buildResourceCheckboxGroup = (formType, project) => {
   return container;
 };
 
+const buildProjectEstimationField = (formType, project) => {
+  const container = document.createElement("div");
+  container.className = "flex flex-col gap-2 ";
+  const estimationValue = formType === "add" ? "" : project.estimation;
+  container.innerHTML = `
+  <label for="projectEstimation" class="text-sm font-medium leading-5 text-gray-700 cursor-pointer">Estimation</label>
+  <div class="relative">
+  <span class="font-medium text-sm text-gray-400 absolute top-2/4 -translate-y-2/4 left-3">US$</span>
+  <input type="number" id="projectEstimation" style="padding-left: 48px;" placeholder="00.00" min="0" class="primary-input estimation-input placeholder:text-gray-300 w-full " value="${estimationValue}">
+  </div>
+`;
+  return container;
+};
+
 const buildModalBody = (formType, project) => {
   const body = document.createElement("div");
   body.className = "flex flex-col gap-8 px-5 py-4 bg-gray-0";
   body.append(
     buildProjectNameField(formType, project),
     buildProjectManagerRadioGroup(formType, project),
-    buildResourceCheckboxGroup(formType, project)
+    buildProjectResourceCheckboxGroup(formType, project),
+    buildProjectEstimationField(formType, project)
   );
   return body;
 };
@@ -171,7 +188,7 @@ const buildModalForm = (formType, project = {}) => {
   form.append(header, body, footer);
   const overlay = createOverlay(formType);
   document.body.append(overlay, form);
-  const nameInput = form.querySelector(".input-project-name");
+  const nameInput = form.querySelector("#projectName");
   const cancelBtn = form.querySelector(".cancel-btn");
   const submitBtn = form.querySelector(".submit-btn");
   handleCancelBtn(cancelBtn, form, overlay);
@@ -179,6 +196,7 @@ const buildModalForm = (formType, project = {}) => {
   if (formType === "edit") {
     enableSubmitOnManagerValidation(project, submitBtn);
     enableSubmitOnResourcesValidation(project, submitBtn);
+    enableSubmitOnEstimationValidation(project, submitBtn);
   }
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -189,10 +207,19 @@ const buildModalForm = (formType, project = {}) => {
     const selectedResources = Array.from(
       form.querySelectorAll('input[name="resource"]:checked')
     ).map((checkbox) => checkbox.value);
+    const projectEstimation =
+      form.querySelector("#projectEstimation");
+    const parsedEstimation = parseInt(projectEstimation.value || 0, 10);
     if (formType === "add") {
-      addProject(projectName, selectedPm, selectedResources);
+      addProject(projectName, selectedPm, selectedResources, parsedEstimation);
     } else {
-      editProject(project, projectName, selectedPm, selectedResources);
+      editProject(
+        project,
+        projectName,
+        selectedPm,
+        selectedResources,
+        parsedEstimation
+      );
     }
     form.remove();
     overlay.remove();
@@ -463,19 +490,6 @@ const buildProjectEstimationCell = (project) => {
   cell.className = "px-2.5 py-3 text-center text-sm text-gray-900";
   cell.textContent = formatEstimationForDisplay(project.estimation);
   return cell;
-};
-
-const formatEstimationForDisplay = (estimationValue) => {
-  if (estimationValue >= 1_000_000_000_000) {
-    return `US$ ${(estimationValue / 1_000_000_000_000).toFixed(1)}t`;
-  } else if (estimationValue >= 1_000_000_000) {
-    return `US$ ${(estimationValue / 1_000_000_000).toFixed(1)}b`;
-  } else if (estimationValue >= 1_000_000) {
-    return `US$ ${(estimationValue / 1_000_000).toFixed(1)}m`;
-  } else if (estimationValue >= 1_000) {
-    return `US$ ${(estimationValue / 1_000).toFixed(1)}k`;
-  }
-  return `US$ ${estimationValue}`;
 };
 
 const buildProjectActionsCell = (project) => {
