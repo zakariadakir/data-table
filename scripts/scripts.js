@@ -17,6 +17,11 @@ const addProjectBtn = document.getElementById("add-project-btn");
 const filterStatusTabsWrapper = document.getElementById("filter-status-tabs");
 const projectsWrapper = document.getElementById("projects-wrapper");
 const sortBtns = document.querySelectorAll(".sort-btn");
+const pageInfo = document.getElementById("page-info");
+const rowsPerPageSelect = document.getElementById("rows-per-page-select");
+const prevPageBtn = document.getElementById("previous-page");
+const nextPageBtn = document.getElementById("next-page");
+const currentPageDisplay = document.getElementById("current-page");
 
 // States:
 export let storedProjectsArr =
@@ -25,6 +30,9 @@ let activeSearchTerm = "";
 let activeStatusFilter = "All";
 let sortKey = "";
 let sortOrder = "";
+let currentPage = 1;
+let rowsPerPage = JSON.parse(localStorage.getItem("rowsPerPage")) || 10;
+rowsPerPageSelect.value = rowsPerPage;
 
 // Functions:
 const updateTotalProjectsCount = () => {
@@ -75,7 +83,9 @@ export const addProject = (name, manager, resources) => {
   };
   storedProjectsArr.unshift(newProject);
   storedProjectsArr.forEach((p, i) => (p.rowIndex = i + 1));
+  currentPage = 1;
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
+  showToastNotification("Project added successfully.");
   refreshUI();
 };
 
@@ -85,6 +95,7 @@ export const editProject = (project, name, manager, resources) => {
   project.lastUpdated = formatDate(new Date());
   project.resources = resources;
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
+  showToastNotification("Project updated successfully.");
   refreshUI();
 };
 
@@ -175,6 +186,7 @@ const handleFilterTabClick = (btn, status) => {
       .forEach((tab) => tab.setAttribute("data-active", "false"));
     btn.setAttribute("data-active", "true");
     activeStatusFilter = status;
+    currentPage = 1;
     renderFilteredAndSortedProjects();
   });
 };
@@ -203,15 +215,26 @@ const renderFilteredAndSortedProjects = () => {
   const sorted = filtered.sort((a, b) =>
     compareValues(a[sortKey], b[sortKey], sortOrder === "asc")
   );
-  renderProjects(sorted);
+  const totalProjects = sorted.length;
+  const totalPages = Math.ceil(totalProjects / rowsPerPage);
+  if (totalPages === 0) {
+    currentPage = 1;
+  } else if (currentPage > totalPages) {
+    currentPage = totalPages;
+  }
+  renderProjects(sorted, currentPage, rowsPerPage);
+  updatePaginationInfo(currentPage, rowsPerPage, totalProjects);
 };
 
-const renderProjects = (arr) => {
+const renderProjects = (arr, currentPage, rowsPerPage) => {
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = Math.min(startIndex + rowsPerPage, arr.length);
+  const projectsToRender = arr.slice(startIndex, endIndex);
   projectsWrapper.innerHTML = "";
-  if (arr.length === 0) {
+  if (projectsToRender.length === 0) {
     projectsWrapper.innerHTML = `<tr><td class="text-sm text-gray-900 py-3 px-2.5" colspan="100%">No projects found.</td></tr>`;
   } else {
-    arr.forEach((project) => {
+    projectsToRender.forEach((project) => {
       const row = buildProjectRow(project);
       projectsWrapper.appendChild(row);
     });
@@ -273,6 +296,28 @@ const sortProjectsByButton = () => {
   });
 };
 
+const updatePaginationInfo = (currentPage, rowsPerPage, totalProjects) => {
+  const startProject =
+    totalProjects === 0 ? 0 : (currentPage - 1) * rowsPerPage + 1;
+  const endProject = Math.min(currentPage * rowsPerPage, totalProjects);
+  pageInfo.textContent = `${startProject}-${endProject} of ${totalProjects}`;
+  const totalPages = Math.ceil(totalProjects / rowsPerPage);
+  currentPageDisplay.innerHTML = `
+  <span class="${totalPages === 0 ? "text-gray-500" : "text-gray-900"}"
+  >${totalProjects === 0 ? 0 : currentPage}</span>
+  /
+  <span class="${
+    totalPages !== currentPage ? "text-gray-500" : "text-gray-900"
+  }">${totalPages}</span>`;
+  prevPageBtn.disabled = currentPage === 1;
+  nextPageBtn.disabled = currentPage === totalPages || totalProjects === 0;
+};
+
+const goToPage = (newPage) => {
+  currentPage = newPage;
+  renderFilteredAndSortedProjects();
+};
+
 export const refreshUI = () => {
   updateTotalProjectsCount();
   renderFilterStatusTabs();
@@ -286,9 +331,25 @@ refreshUI();
 // Event Listeners:
 searchProjectInput.addEventListener("input", (e) => {
   activeSearchTerm = e.target.value.toLowerCase();
+  currentPage = 1;
   renderFilteredAndSortedProjects();
 });
 
 addProjectBtn.addEventListener("click", () => {
   openAddProjectModal();
+});
+
+rowsPerPageSelect.addEventListener("change", (e) => {
+  rowsPerPage = parseInt(e.target.value, 10);
+  localStorage.setItem("rowsPerPage", JSON.stringify(rowsPerPage));
+  renderFilteredAndSortedProjects();
+});
+
+prevPageBtn.addEventListener("click", () => {
+  if (currentPage > 1) goToPage(currentPage - 1);
+});
+
+nextPageBtn.addEventListener("click", () => {
+  const totalPages = Math.ceil(storedProjectsArr.length / rowsPerPage);
+  if (currentPage < totalPages) goToPage(currentPage + 1);
 });
