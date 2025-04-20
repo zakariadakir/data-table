@@ -20,6 +20,7 @@ export const defaultProjectsArr = [
     status: "On Track",
     lastUpdated: "15 Mar 2021, 12:47 PM",
     resources: ["UX/UI Design", "Frontend", "Backend", "Full Stack"],
+    estimation: 10000,
   },
   {
     isSelected: false,
@@ -31,6 +32,7 @@ export const defaultProjectsArr = [
     status: "On Track",
     lastUpdated: "15 Mar 2021, 12:48 PM",
     resources: ["UX/UI Design"],
+    estimation: 20000,
   },
   {
     isSelected: false,
@@ -42,6 +44,7 @@ export const defaultProjectsArr = [
     status: "On Track",
     lastUpdated: "15 Mar 2021, 12:46 PM",
     resources: ["UX/UI Design", "Frontend", "Full Stack"],
+    estimation: 1000000,
   },
   {
     isSelected: false,
@@ -53,6 +56,7 @@ export const defaultProjectsArr = [
     status: "On Hold",
     lastUpdated: "15 Mar 2023, 12:47 PM",
     resources: ["UX/UI Design", "Frontend", "Backend", "Full Stack"],
+    estimation: 50,
   },
   {
     isSelected: false,
@@ -64,6 +68,7 @@ export const defaultProjectsArr = [
     status: "On Hold",
     lastUpdated: "15 Mar 2021, 12:47 PM",
     resources: ["UX/UI Design", "Frontend", "Backend", "Full Stack"],
+    estimation: 600,
   },
 ];
 

@@ -251,6 +251,7 @@ export const buildProjectRow = (project) => {
     buildProjectStatusCell(project),
     buildProjectLastUpdatedCell(project),
     buildProjectResourcesCell(project),
+    buildProjectEstimationCell(project),
     buildProjectActionsCell(project)
   );
   return row;
@@ -455,6 +456,26 @@ const buildResourcesTooltip = (project) => {
   `;
   container.appendChild(list);
   return container;
+};
+
+const buildProjectEstimationCell = (project) => {
+  const cell = document.createElement("td");
+  cell.className = "px-2.5 py-3 text-center text-sm text-gray-900";
+  cell.textContent = formatEstimationForDisplay(project.estimation);
+  return cell;
+};
+
+const formatEstimationForDisplay = (estimationValue) => {
+  if (estimationValue >= 1_000_000_000_000) {
+    return `US$ ${(estimationValue / 1_000_000_000_000).toFixed(1)}t`;
+  } else if (estimationValue >= 1_000_000_000) {
+    return `US$ ${(estimationValue / 1_000_000_000).toFixed(1)}b`;
+  } else if (estimationValue >= 1_000_000) {
+    return `US$ ${(estimationValue / 1_000_000).toFixed(1)}m`;
+  } else if (estimationValue >= 1_000) {
+    return `US$ ${(estimationValue / 1_000).toFixed(1)}k`;
+  }
+  return `US$ ${estimationValue}`;
 };
 
 const buildProjectActionsCell = (project) => {
