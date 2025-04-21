@@ -127,6 +127,11 @@
   @apply cursor-pointer transition duration-300 py-0.5 px-2 tracking-[0.36px] text-xs font-medium rounded text-gray-700 bg-white shadow-resource-checkbox-default hover:text-gray-900 hover:shadow-resource-checkbox-hover active:shadow-resource-checkbox-active peer-checked:text-white peer-checked:bg-indigo-500 peer-checked:shadow-resource-checkbox-checked peer-checked:hover:bg-indigo-600 peer-checked:hover:shadow-resource-checkbox-hover;
 }
 
+/* Time Line */
+.timeline-date {
+  @apply text-sm text-gray-700 text-center rounded-md bg-indigo-0 px-[9px] py-1;
+}
+
 /* Actions Cell */
 .project-row:has(.project-actions-menu) {
   @apply bg-gray-0;

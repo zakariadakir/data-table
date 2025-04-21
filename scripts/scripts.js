@@ -50,7 +50,7 @@ export const handleCancelBtn = (btn, form, overlay) => {
   });
 };
 
-export const formatDate = (date) =>
+export const formatLastUpdatedDate = (date) =>
   new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "short",
@@ -62,6 +62,13 @@ export const formatDate = (date) =>
     .format(date)
     .replace(/am|pm/i, (m) => m.toUpperCase());
 
+export const formatTimelineDate = (date) =>
+  new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(date);
+
 export const addProject = (name, manager, resources, estimation) => {
   const newProject = {
     isSelected: false,
@@ -71,8 +78,12 @@ export const addProject = (name, manager, resources, estimation) => {
     pm: manager,
     isArchived: false,
     status: "On Track",
-    lastUpdated: formatDate(new Date()),
+    lastUpdated: formatLastUpdatedDate(new Date()),
     resources: resources,
+    timeLine: {
+      start: "2021-04-15",
+      end: "2021-06-15",
+    },
     estimation: estimation,
   };
   storedProjectsArr.unshift(newProject);
@@ -86,7 +97,7 @@ export const addProject = (name, manager, resources, estimation) => {
 export const editProject = (project, name, manager, resources, estimation) => {
   project.name = name;
   project.pm = manager;
-  project.lastUpdated = formatDate(new Date());
+  project.lastUpdated = formatLastUpdatedDate(new Date());
   project.resources = resources;
   project.estimation = estimation;
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
@@ -141,7 +152,7 @@ export const enableSubmitOnResourcesValidation = (project, submitBtn) => {
 export const enableSubmitOnEstimationValidation = (project, submitBtn) => {
   const estimationInput = document.getElementById("projectEstimation");
   estimationInput.addEventListener("input", () => {
-    submitBtn.disabled = estimationInput.value === project.estimation;
+    submitBtn.disabled = Number(estimationInput.value) === project.estimation;
   });
 };
 
@@ -166,7 +177,7 @@ export const toggleArchiveProject = (project) => {
 export const updateProjectStatus = (project) => {
   const selectedStatus = document.querySelector(".status-radio:checked");
   project.status = selectedStatus.value;
-  project.lastUpdated = formatDate(new Date());
+  project.lastUpdated = formatLastUpdatedDate(new Date());
   localStorage.setItem("projects", JSON.stringify(storedProjectsArr));
   refreshUI();
   showToastNotification("Project status updated successfully");
@@ -197,7 +208,6 @@ const updateTotalProjectsCount = () => {
 
 const isDuplicateProjectName = (name, originalName) =>
   storedProjectsArr.some((p) => p.name === name && p.name !== originalName);
-
 
 const filterProjectsByStatus = (status) => {
   if (status === "All") return storedProjectsArr;

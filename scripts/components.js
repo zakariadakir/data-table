@@ -16,6 +16,7 @@ import {
   enableSubmitOnResourcesValidation,
   enableSubmitOnEstimationValidation,
   formatEstimationForDisplay,
+  formatTimelineDate,
   addProject,
   editProject,
   removeProject,
@@ -207,8 +208,7 @@ const buildModalForm = (formType, project = {}) => {
     const selectedResources = Array.from(
       form.querySelectorAll('input[name="resource"]:checked')
     ).map((checkbox) => checkbox.value);
-    const projectEstimation =
-      form.querySelector("#projectEstimation");
+    const projectEstimation = form.querySelector("#projectEstimation");
     const parsedEstimation = parseInt(projectEstimation.value || 0, 10);
     if (formType === "add") {
       addProject(projectName, selectedPm, selectedResources, parsedEstimation);
@@ -278,6 +278,7 @@ export const buildProjectRow = (project) => {
     buildProjectStatusCell(project),
     buildProjectLastUpdatedCell(project),
     buildProjectResourcesCell(project),
+    buildProjectTimeLineCell(project),
     buildProjectEstimationCell(project),
     buildProjectActionsCell(project)
   );
@@ -454,7 +455,7 @@ const buildProjectLastUpdatedCell = (project) => {
 const buildProjectResourcesCell = (project) => {
   const cell = document.createElement("td");
   cell.className = "py-3 px-2.5 text-center relative";
-  cell.innerHTML = `<span class="text-sm text-gray-900 text-center rounded-md bg-indigo-0 px-[7px] py-1">${project.resources.length}</span>`;
+  cell.innerHTML = `<span class="text-sm text-gray-700 text-center rounded-md bg-indigo-0 px-[7px] py-1">${project.resources.length}</span>`;
   const span = cell.querySelector("span");
   const tooltip = buildResourcesTooltip(project);
   const showTooltip = () => cell.appendChild(tooltip);
@@ -472,7 +473,8 @@ const buildResourcesTooltip = (project) => {
   container.className = "resource-tooltip";
   const list = document.createElement("ul");
   list.className = "flex flex-col gap-3 mt-3";
-  if(project.resources.length === 0) list.innerHTML = `<li class="text-sm text-white text-left font-medium">No resources</li>`
+  if (project.resources.length === 0)
+    list.innerHTML = `<li class="text-sm text-white text-left font-medium">No resources</li>`;
   project.resources.forEach((resource) => {
     const listItem = document.createElement("li");
     listItem.className = "text-sm text-white text-left font-medium";
@@ -484,6 +486,22 @@ const buildResourcesTooltip = (project) => {
   `;
   container.appendChild(list);
   return container;
+};
+
+const buildProjectTimeLineCell = (project) => {
+  const cell = document.createElement("td");
+  cell.className =
+    "px-2.5 py-3 text-center text-sm text-gray-900 flex items-center justify-center gap-2";
+  const startDate = document.createElement("span");
+  const separatorIcon = document.createElement("i");
+  separatorIcon.className = "ph-bold ph-caret-right text-gray-400";
+  const endDate = document.createElement("span");
+  startDate.className = "timeline-date";
+  endDate.className = "timeline-date";
+  startDate.textContent = formatTimelineDate(new Date(project.timeLine.start));
+  endDate.textContent = formatTimelineDate(new Date(project.timeLine.end));
+  cell.append(startDate, separatorIcon, endDate);
+  return cell;
 };
 
 const buildProjectEstimationCell = (project) => {
