@@ -472,6 +472,7 @@ const buildResourcesTooltip = (project) => {
   container.className = "resource-tooltip";
   const list = document.createElement("ul");
   list.className = "flex flex-col gap-3 mt-3";
+  if(project.resources.length === 0) list.innerHTML = `<li class="text-sm text-white text-left font-medium">No resources</li>`
   project.resources.forEach((resource) => {
     const listItem = document.createElement("li");
     listItem.className = "text-sm text-white text-left font-medium";
