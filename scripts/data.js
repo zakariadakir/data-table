@@ -22,7 +22,7 @@ export const defaultProjectsArr = [
     resources: ["UX/UI Design", "Frontend", "Backend", "Full Stack"],
     timeLine: {
       start: "2021-04-15",
-      end: "2021-06-15",
+      end: "2024-06-15",
     },
     estimation: 10000,
   },
@@ -38,7 +38,7 @@ export const defaultProjectsArr = [
     resources: ["UX/UI Design"],
     timeLine: {
       start: "2021-04-15",
-      end: "2021-06-15",
+      end: "2027-06-15",
     },
     estimation: 20000,
   },
@@ -54,7 +54,7 @@ export const defaultProjectsArr = [
     resources: ["UX/UI Design", "Frontend", "Full Stack"],
     timeLine: {
       start: "2021-04-15",
-      end: "2021-06-15",
+      end: "2026-06-15",
     },
     estimation: 1000000,
   },
@@ -85,8 +85,8 @@ export const defaultProjectsArr = [
     lastUpdated: "15 Mar 2021, 12:47 PM",
     resources: ["UX/UI Design", "Frontend", "Backend", "Full Stack"],
     timeLine: {
-      start: "2021-04-15",
-      end: "2021-06-15",
+      start: "2013-04-15",
+      end: "2031-06-15",
     },
     estimation: 600,
   },

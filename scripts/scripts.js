@@ -294,6 +294,17 @@ const compareValues = (a, b, ascending) => {
     }
     return ascending ? a.localeCompare(b) : b.localeCompare(a);
   }
+  if (sortKey === "timeLine") {
+    const startA = new Date(a.start);
+    const startB = new Date(b.start);
+    const endB = new Date(b.end);
+    const endA = new Date(a.end);
+    if (startA.getTime() !== startB.getTime()) {
+      return ascending ? startA - startB : startB - startA;
+    } else {
+      return ascending ? endA - endB : endB - endA;
+    }
+  }
   if (Array.isArray(a) && Array.isArray(b)) {
     return ascending ? a.length - b.length : b.length - a.length;
   }
